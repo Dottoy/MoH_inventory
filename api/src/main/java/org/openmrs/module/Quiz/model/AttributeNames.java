@@ -1,12 +1,14 @@
 package org.openmrs.module.Quiz.model;
 
+import java.util.Date;
+
 public class AttributeNames {
     private String Name;
     private String Description;
     private String Format;
     private String uuid;
     private int Creator;
-    private String CreateDate;
+    private Date CreateDate;
     private int attributeId;
 
     public String getName() {
@@ -49,11 +51,11 @@ public class AttributeNames {
         Creator = creator;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return CreateDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         CreateDate = createDate;
     }
 
