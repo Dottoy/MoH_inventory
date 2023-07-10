@@ -10,6 +10,8 @@
 package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
 
+import java.util.List;
+
 
 /**
  *  Database methods for {@link QuizService}.
@@ -23,7 +25,19 @@ public interface QuizDAO {
      //moh functions end here
 
      String addItem(String ItemName, String Description);
+     String addDevice(Integer device_type_id, String device_name);
+
+<<<<<<< HEAD
 
 
+=======
+     String updateDevice(String uuid, int deviceTypeId, String deviceName);
 
+     List deviceList();
+    String addAttributeNames(String name, String description, String format);
+
+    String updateAttributeName(String name, String description, String format, String uuid);
+
+    List getAttributeName();
+>>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
 }

@@ -18,9 +18,11 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
+import org.openmrs.module.Quiz.model.AttributeNames;
+import org.openmrs.module.Quiz.model.MohDeviceDetails;
 import org.openmrs.module.Quiz.model.PersonalDetails;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 /**
@@ -113,5 +115,117 @@ public class HibernateQuizDAO implements QuizDAO {
         return result;
     }
 
+<<<<<<< HEAD
+=======
+    public String addDevice(Integer device_type_id, String device_name) {
+        JSONObject statusObject = new JSONObject();
+        String hql = "insert into moh_device (device_type_id, device_name, created_by, created_at, uuid) " +
+                " values (" + device_type_id + ",'" + device_name + "','" + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+            statusObject.put("status","success");
+            statusObject.put("statusCode",200);
+            statusObject.put("message","Success");
+        }else{
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Problem on insert Data");
+        }
+        return statusObject.toString();
+    }
+
+    @Override
+    public String updateDevice(String uuid, int deviceTypeId, String deviceName) {
+        JSONObject statusObject = new JSONObject();
+        String hql = "UPDATE moh_device SET " +
+                "device_type_id=" + deviceTypeId + ",  device_name='"+ deviceName +"' WHERE uuid='"+ uuid +"'";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+            statusObject.put("status","success");
+            statusObject.put("statusCode",200);
+            statusObject.put("message","Update Success");
+        }else{
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Problem on insert Data");
+        }
+        return statusObject.toString();
+    }
+
+    @Override
+    public List deviceList() {
+        String hql ="SELECT moh_device_type.device_type_name AS deviceTypeName, " +
+                "device_name AS deviceName, " +
+                "moh_device.created_by AS createdBy, " +
+                "moh_device.created_at AS createdAt, " +
+                "moh_device.uuid AS uuid FROM moh_device, moh_device_type " +
+                "WHERE moh_device.device_type_id=moh_device_type.device_type_id" ;
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String addAttributeNames(String name, String description, String format) {
+        JSONObject res = new JSONObject();
+        String answ = "insert into moh_additional_attributes_names (name, description,format, created_by, created_at, uuid) " +
+                " values ('" + name + "','" + description + "','"+ format +"','" + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(answ).executeUpdate();
+        if (rowsAffected >= 1) {
+            res.put("status","success");
+            res.put("statusCode",200);
+            res.put("message","Success");
+        }else{
+            res.put("status","failed");
+            res.put("statusCode",500);
+            res.put("message","Problem on insert Data");
+        }
+        return res.toString();
+    }
+
+    @Override
+    public String updateAttributeName(String name, String description, String format, String uuid) {
+        //JSONObject res = new JSONObject();
+        String res;
+        String ans = "update moh_additional_attributes_names set name = '"+name+"', description = '"+description+"',format='"+format+"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+            {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public List getAttributeName() {
+        String hql;
+            hql ="select name as 'Name', description as 'Description',  created_by as Creator, created_at as 'CreateDate',format as 'Format', uuid as 'uuid'  " +
+                    "from moh_additional_attributes_names";
+
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+>>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
 
 }
