@@ -312,7 +312,7 @@
 
         <addForeignKeyConstraint constraintName="fk_moh_device_attribute_attribute_id"
                                  baseTableName="moh_device_attribute" baseColumnNames="attribute_id"
-                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="id"
+                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
                                  onDelete="RESTRICT" onUpdate="CASCADE"/>
 
 
@@ -394,12 +394,6 @@
                                  baseTableName="moh_inventory_movement_history" baseColumnNames="given_by"
                                  referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
                                  onUpdate="CASCADE"/>
-
-        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_created_by"
-                                 baseTableName="moh_inventory_movement_history" baseColumnNames="created_by"
-                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
-                                 onUpdate="CASCADE"/>
-
 
         <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_new_location"
                                  baseTableName="moh_inventory_movement_history" baseColumnNames="new_location"
