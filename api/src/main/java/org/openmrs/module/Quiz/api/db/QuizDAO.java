@@ -10,6 +10,8 @@
 package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
 
+import java.util.List;
+
 
 /**
  *  Database methods for {@link QuizService}.
@@ -25,4 +27,6 @@ public interface QuizDAO {
     String addAttributeNames(String name, String description, String format);
 
     String updateAttributeName(String name, String description, String format, String uuid);
+
+    List getAttributeName(String name);
 }

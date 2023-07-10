@@ -18,6 +18,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
+import org.openmrs.module.Quiz.model.AttributeNames;
 import org.openmrs.module.Quiz.model.PersonalDetails;
 
 import java.time.LocalDateTime;
@@ -119,19 +120,38 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public String updateAttributeName(String name, String description, String format, String uuid) {
-        JSONObject res = new JSONObject();
-        String hql = "update moh_additional_attributes_names set name = '"+name+"', description = '"+description+"' where uuid = '"+uuid+"'";
-        int rowsAffected = createSQLQuery(hql).executeUpdate();
-        if (rowsAffected >= 1) {
-            res.put("status","success");
-            res.put("statusCode",200);
-            res.put("message","Success");
-        }else{
-            res.put("status","failed");
-            res.put("statusCode",500);
-            res.put("message","Problem on insert Data");
+        //JSONObject res = new JSONObject();
+        String res;
+        String ans = "update moh_additional_attributes_names set name = '"+name+"', description = '"+description+"',format='"+format+"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
         }
-        return res.toString();
+        else
+            {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public List getAttributeName(String name) {
+        String hql;
+            hql ="select name as 'Name', description as 'Description',  created_by as 'Creator', created_at as 'CreateDate',format as 'Format', uuid as 'uuid'  " +
+                    "from moh_additional_attributes_names";
+
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
     }
 
 }

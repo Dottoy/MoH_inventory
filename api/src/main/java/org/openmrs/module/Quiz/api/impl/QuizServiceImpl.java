@@ -83,28 +83,32 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     @Override
     public String updateAttributeName(String name){
         JSONObject attributeName = new JSONObject(name);
-        if (attributeName.has("name") && attributeName.has("description") && attributeName.has("format")){
-            String status = quizDAO.updateAttributeName(attributeName.getString("name"), attributeName.getString("description"),attributeName.getString("format"),attributeName.getString("uuid"));
-            if (status.equalsIgnoreCase("success")){
-                JSONObject statusObject = new JSONObject();
+        JSONObject statusObject = new JSONObject();
+        if (attributeName.has("name") && attributeName.has("description") && attributeName.has("uuid")){
+            String res = quizDAO.updateAttributeName(attributeName.getString("name"), attributeName.getString("description"),attributeName.getString("format"),attributeName.getString("uuid"));
+            if (res.equalsIgnoreCase("success"))
+            {
                 statusObject.put("status","success");
                 statusObject.put("statusCode",200);
-                statusObject.put("message","Person information updated successfully");
+                statusObject.put("message","Attribute name updated successfully");
                 return statusObject.toString();
             }
             else {
-                JSONObject statusObject = new JSONObject();
                 statusObject.put("status","failed");
                 statusObject.put("statusCode",500);
-                statusObject.put("message","Failed to update personal information");
+                statusObject.put("message","Failed to update attribute name information");
                 return statusObject.toString();
             }
         }
 
-        JSONObject statusObject = new JSONObject();
         statusObject.put("status","failed");
         statusObject.put("statusCode",1000);
         statusObject.put("message","Important parameters are missing!");
         return statusObject.toString();
+    }
+
+    @Override
+    public List getAttributeName(String name) {
+        return quizDAO.getAttributeName(name);
     }
 }

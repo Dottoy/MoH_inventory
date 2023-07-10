@@ -63,11 +63,31 @@ public class MyQuizController extends BaseRestController {
     }
 
     //for update attribute names
+
     @RequestMapping(value="/update_attribute_name",  method = RequestMethod.POST)
     @ResponseBody
     public String updateAttributeName(@RequestBody String name)
     {
         QuizService quizService = Context.getService(QuizService.class);
         return quizService.updateAttributeName(name);
+    }
+
+    //for get list of attribute name
+    @RequestMapping(value="/get_attribute_name", method = RequestMethod.POST)
+    @ResponseBody
+    public String getAttributeName(@RequestBody String name)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        List attributeName =  quizService.getAttributeName(name);
+        String response;
+        if(attributeName!=null)
+        {
+            response=new Gson().toJson(attributeName);
+        }
+        else{
+            List empty = new ArrayList();
+            response = new Gson().toJson(empty);
+        }
+        return response;
     }
 }
