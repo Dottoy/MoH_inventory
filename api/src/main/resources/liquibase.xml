@@ -6,170 +6,309 @@
     <!-- See https://www.liquibase.org/manual/home#available_database_refactorings for a list of supported elements and attributes-->
     <!-- Adding a global property -->
 
-    <changeSet id="test_item" author="MoH" dbms="mysql">
+    <changeSet id="moh_device_type" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="test_item"/>
+                <tableExists tableName="moh_device_type" />
             </not>
         </preConditions>
-        <comment>A table to store items</comment>
-        <createTable tableName="test_item">
-            <column name="item_id" type="int" autoIncrement="true">
+        <comment>table to store device types</comment>
+        <createTable tableName="moh_device_type">
+            <column name="device_type_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="item_name" type="varchar(45)">
+            <column name="device_type_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="moh_device" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_device" />
+            </not>
+        </preConditions>
+        <comment>table to store device details</comment>
+        <createTable tableName="moh_device">
+            <column name="device_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_device_type_id" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="device_name" type="varchar(255)">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="moh_additional_attributes_names" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_additional_attributes_names" />
+            </not>
+        </preConditions>
+        <comment>table to store additional attribute</comment>
+        <createTable tableName="moh_additional_attributes_names">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="description" type="varchar(255)">
-                <constraints nullable="false" unique="false"/>
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="created_by" type="int">
-                <constraints nullable="false"/>
+            <column name="format" type="varchar(255)">
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="date_created" type="datetime">
-                <constraints nullable="false"/>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="retired" type="smallint" defaultValueNumeric="0">
-                <constraints nullable="false"/>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="uuid" type="char(58)">
-                <constraints nullable="false" unique="true"/>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="test_item_attribute_type" author="MoH" dbms="mysql">
+    <changeSet id="moh_device_attribute" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="test_item_attribute_type"/>
+                <tableExists tableName="moh_device_attribute" />
             </not>
         </preConditions>
-        <comment>A table to store items attribute type</comment>
-        <createTable tableName="test_item_attribute_type">
-            <column name="type_id" type="int" autoIncrement="true">
+        <comment>table to store device attribute</comment>
+        <createTable tableName="moh_device_attribute">
+            <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="attribute_name" type="varchar(45)">
-                <constraints nullable="false" unique="true"/>
+            <column name="device_id_fk" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="retired" type="smallint" defaultValueNumeric="0">
-                <constraints nullable="false"/>
-            </column>
-            <column name="uuid" type="char(58)">
-                <constraints nullable="false" unique="true"/>
+            <column name="attribute_id_fk" type="int">
+                <constraints nullable="false" unique="false" />
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="test_item_attribute" author="MoH" dbms="mysql">
+    <changeSet id="moh_device_inventory" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="test_item_attribute"/>
+                <tableExists tableName="moh_device_inventory" />
             </not>
         </preConditions>
-        <comment>A table to store items attribute</comment>
-        <createTable tableName="test_item_attribute">
-            <column name="attribute_id" type="int" autoIncrement="true">
+        <comment>table to store device invetory details</comment>
+        <createTable tableName="moh_device_inventory">
+            <column name="inventory_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="item_id" type="int">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="type_id" type="int">
-                <constraints nullable="false" unique="false"/>
+            <column name="fk_device_id" type="int">
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="date_added" type="datetime">
-                <constraints nullable="false"/>
+            <column name="fk_attribute_name_id" type="int">
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="created_by" type="int">
-                <constraints nullable="false"/>
+            <column name="attribute_value" type="varchar(255)">
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="uuid" type="char(58)">
-                <constraints nullable="false" unique="true"/>
+            <column name="current_location_fk" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="device_status_id_fk" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="test_user" author="MoH" dbms="mysql">
+    <changeSet id="moh_device_inventory_attribute_answer" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="test_user"/>
+                <tableExists tableName="moh_device_inventory_attribute_answer" />
             </not>
         </preConditions>
-        <comment>A table to store test user</comment>
-        <createTable tableName="test_user">
-            <column name="user_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+        <comment>table to store attribute answer</comment>
+        <createTable tableName="moh_device_inventory_attribute_answer">
+            <column name="fk_inventory_id" type="int">
+                <constraints unique="false" nullable="false"/>
             </column>
-            <column name="first_name" type="varchar(45)">
+            <column name="attribute_name_id_fk" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="last_name" type="varchar(45)">
-                <constraints nullable="false" unique="false"/>
+            <column name="attribute_value" type="int">
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="username" type="varchar(45)">
-                <constraints nullable="false" unique="false"/>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="password" type="varchar(45)">
-                <constraints nullable="false" unique="false"/>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
             </column>
-            <column name="is_active" type="int" defaultValueNumeric="0">
-                <constraints nullable="false"/>
-            </column>
-            <column name="uuid" type="char(58)">
-                <constraints nullable="false" unique="true"/>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
             </column>
         </createTable>
-        <createIndex indexName="ind_test_item_attribute"
-                     schemaName="openmrs"
-                     tableName="test_item_attribute"
-                     unique="true">
-            <column name="item_id" type="int"/>
-        </createIndex>
-        <createIndex indexName="ind_test_item_attribute_type"
-                     schemaName="openmrs"
-                     tableName="test_item_attribute_type"
-                     unique="true">
-            <column name="type_id" type="int"/>
-        </createIndex>
-        <createIndex indexName="ind_test_item"
-                     schemaName="openmrs"
-                     tableName="test_item"
-                     unique="true">
-            <column name="created_by" type="int"/>
-        </createIndex>
-        <addForeignKeyConstraint constraintName="fk_test_item_attribute"
-                                 baseTableName="test_item_attribute" baseColumnNames="item_id"
-                                 referencedTableName="test_item" referencedColumnNames="item_id" onDelete="CASCADE"
-                                 onUpdate="CASCADE"/>
-        <addForeignKeyConstraint constraintName="fk_test_item_attribute_type_id"
-                                 baseTableName="test_item_attribute" baseColumnNames="type_id"
-                                 referencedTableName="test_item_attribute_type" referencedColumnNames="type_id"
-                                 onDelete="CASCADE" onUpdate="CASCADE"/>
-        <addForeignKeyConstraint constraintName="fk_test_item_attribute_created_by"
-                                 baseTableName="test_item_attribute" baseColumnNames="created_by"
-                                 referencedTableName="users" referencedColumnNames="user_id"
-                                 onDelete="CASCADE" onUpdate="CASCADE"/>
-        <addForeignKeyConstraint constraintName="fk_test_item_created_by"
-                                 baseTableName="test_item" baseColumnNames="created_by"
-                                 referencedTableName="users" referencedColumnNames="user_id"
-                                 onDelete="CASCADE" onUpdate="CASCADE"/>
-
-
     </changeSet>
-    <changeSet author="bosco" id="test_item_attribute_type_insert">
-        <comment>Insert data</comment>
-        <sql>
-            insert into test_item_attribute_type (attribute_name, uuid ) values ('color', UUID());
-        </sql>
-        <sql>
-            insert into test_item_attribute_type (attribute_name, uuid ) values ('price', UUID());
-        </sql>
-        <sql>
-            insert into test_item_attribute_type (attribute_name, uuid ) values ('origin', UUID());
-        </sql>
-        <sql>
-            insert into test_item_attribute_type (attribute_name, uuid ) values ('destination', UUID());
-        </sql>
+
+    <changeSet id="moh_location" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_location" />
+            </not>
+        </preConditions>
+        <comment>table to store locations</comment>
+        <createTable tableName="moh_location">
+            <column name="location_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="location_name" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
     </changeSet>
+
+    <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_device_maintenance" />
+            </not>
+        </preConditions>
+        <comment>table to store item detail maintainance details</comment>
+        <createTable tableName="moh_device_maintenance">
+            <column name="maintenance_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_inventory_id" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="reported_issue" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="reported_by" type="int">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="service_by" type="int">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="date_reported" type="date">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="service_date" type="date">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="moh_inventory_movement_history" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_inventory_movement_history" />
+            </not>
+        </preConditions>
+        <comment>table to store movement history</comment>
+        <createTable tableName="moh_inventory_movement_history">
+            <column name="fk_inventory_id" type="int">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="fk_received_by" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="fk_given_by" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="fk_new_location" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="movement_date" type="date">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="moh_device_status" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="moh_device_status" />
+            </not>
+        </preConditions>
+        <comment>table to store device status</comment>
+        <createTable tableName="moh_device_status">
+            <column name="status_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status_name" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_by" type="int" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="created_at" type="date" >
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
