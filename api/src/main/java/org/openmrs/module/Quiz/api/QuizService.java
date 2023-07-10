@@ -29,6 +29,11 @@ public interface QuizService extends OpenmrsService {
     //function for moh test end here
 
     String addItemObject(String ItemPayload);
+    String addDevice(String DevicePayload);
+
+    String updateDevice(String detailPayload);
+
+    String deviceList();
 
     String addAttributeNames(String names);
 

@@ -99,6 +99,46 @@ public class HibernateQuizDAO implements QuizDAO {
         return result;
     }
 
+    public String addDevice(Integer device_type_id, String device_name) {
+        JSONObject statusObject = new JSONObject();
+        String hql = "insert into moh_device (device_type_id, device_name, created_by, created_at, uuid) " +
+                " values (" + device_type_id + ",'" + device_name + "','" + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+            statusObject.put("status","success");
+            statusObject.put("statusCode",200);
+            statusObject.put("message","Success");
+        }else{
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Problem on insert Data");
+        }
+        return statusObject.toString();
+    }
+
+    @Override
+    public String updateDevice(String uuid, int deviceTypeId, String deviceName) {
+        JSONObject statusObject = new JSONObject();
+        String hql = "UPDATE moh_device SET " +
+                "device_type_id=" + deviceTypeId + ",  device_name='"+ deviceName +"' WHERE uuid='"+ uuid +"'";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+            statusObject.put("status","success");
+            statusObject.put("statusCode",200);
+            statusObject.put("message","Update Success");
+        }else{
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Problem on insert Data");
+        }
+        return statusObject.toString();
+    }
+
+    @Override
+    public String deviceList() {
+        return null;
+    }
+
     @Override
     public String addAttributeNames(String name, String description, String format) {
         JSONObject res = new JSONObject();
