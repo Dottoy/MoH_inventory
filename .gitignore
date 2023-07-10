@@ -5,5 +5,3 @@ quiz/.idea
 *.properties
 /target/
 */target/**
-quiz/omod/target
-quiz/api/target
