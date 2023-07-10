@@ -9,7 +9,7 @@
     <changeSet id="moh_device_type" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_type" />
+                <tableExists tableName="moh_device_type"/>
             </not>
         </preConditions>
         <comment>table to store device types</comment>
@@ -21,13 +21,13 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="created_by" type="int">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -35,7 +35,7 @@
     <changeSet id="moh_device" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device" />
+                <tableExists tableName="moh_device"/>
             </not>
         </preConditions>
         <comment>table to store device details</comment>
@@ -43,20 +43,20 @@
             <column name="device_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="fk_device_type_id" type="int">
+            <column name="device_type_id" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="device_name" type="varchar(255)">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -64,31 +64,31 @@
     <changeSet id="moh_additional_attributes_names" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_additional_attributes_names" />
+                <tableExists tableName="moh_additional_attributes_names"/>
             </not>
         </preConditions>
         <comment>table to store additional attribute</comment>
         <createTable tableName="moh_additional_attributes_names">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="attribute_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="description" type="varchar(255)">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="format" type="varchar(255)">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -96,19 +96,19 @@
     <changeSet id="moh_device_attribute" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_attribute" />
+                <tableExists tableName="moh_device_attribute"/>
             </not>
         </preConditions>
         <comment>table to store device attribute</comment>
         <createTable tableName="moh_device_attribute">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="device_attribute_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="device_id_fk" type="int">
+            <column name="device_id" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="attribute_id_fk" type="int">
-                <constraints nullable="false" unique="false" />
+            <column name="attribute_id" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -116,7 +116,7 @@
     <changeSet id="moh_device_inventory" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_inventory" />
+                <tableExists tableName="moh_device_inventory"/>
             </not>
         </preConditions>
         <comment>table to store device invetory details</comment>
@@ -127,29 +127,29 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="fk_device_id" type="int">
-                <constraints nullable="false" unique="false" />
+            <column name="device_id" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="fk_attribute_name_id" type="int">
-                <constraints nullable="false" unique="false" />
+            <column name="attribute_name_id" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="attribute_value" type="varchar(255)">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="current_location_fk" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="current_location" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="device_status_id_fk" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="device_status_id" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -157,54 +157,28 @@
     <changeSet id="moh_device_inventory_attribute_answer" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_inventory_attribute_answer" />
+                <tableExists tableName="moh_device_inventory_attribute_answer"/>
             </not>
         </preConditions>
         <comment>table to store attribute answer</comment>
         <createTable tableName="moh_device_inventory_attribute_answer">
-            <column name="fk_inventory_id" type="int">
+            <column name="inventory_id" type="int">
                 <constraints unique="false" nullable="false"/>
             </column>
-            <column name="attribute_name_id_fk" type="int">
+            <column name="attribute_name_id" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="attribute_value" type="int">
-                <constraints nullable="false" unique="false" />
-            </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
-            </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
-            </column>
-            <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="moh_location" author="Mulisa" dbms="mysql">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="moh_location" />
-            </not>
-        </preConditions>
-        <comment>table to store locations</comment>
-        <createTable tableName="moh_location">
-            <column name="location_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="location_name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -212,7 +186,7 @@
     <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_maintenance" />
+                <tableExists tableName="moh_device_maintenance"/>
             </not>
         </preConditions>
         <comment>table to store item detail maintainance details</comment>
@@ -220,32 +194,29 @@
             <column name="maintenance_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="fk_inventory_id" type="int">
+            <column name="inventory_id" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="reported_issue" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="reported_by" type="int">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="service_by" type="int">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="date_reported" type="date">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="service_date" type="date">
-                <constraints nullable="false" unique="false" />
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
-            </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -253,34 +224,34 @@
     <changeSet id="moh_inventory_movement_history" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_inventory_movement_history" />
+                <tableExists tableName="moh_inventory_movement_history"/>
             </not>
         </preConditions>
         <comment>table to store movement history</comment>
         <createTable tableName="moh_inventory_movement_history">
-            <column name="fk_inventory_id" type="int">
+            <column name="inventory_id" type="int">
                 <constraints unique="false" nullable="false"/>
             </column>
-            <column name="fk_received_by" type="int">
+            <column name="received_by" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="fk_given_by" type="int">
+            <column name="given_by" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="fk_new_location" type="int">
+            <column name="new_location" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="movement_date" type="date">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -288,7 +259,7 @@
     <changeSet id="moh_device_status" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="moh_device_status" />
+                <tableExists tableName="moh_device_status"/>
             </not>
         </preConditions>
         <comment>table to store device status</comment>
@@ -299,16 +270,147 @@
             <column name="status_name" type="varchar(255)">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_by" type="int" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_by" type="int">
+                <constraints nullable="false" unique="false"/>
             </column>
-            <column name="created_at" type="date" >
-                <constraints nullable="false" unique="false" />
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
             </column>
             <column name="uuid" type="varchar(255)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="moh_inventory_table_relations" author="moh" dbms="mysql">
+        <comment>Creating fk for inventory</comment>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_type_created_by"
+                                 baseTableName="moh_device_type" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_type_id"
+                                 baseTableName="moh_device" baseColumnNames="device_type_id"
+                                 referencedTableName="moh_device_type" referencedColumnNames="device_type_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_created_by"
+                                 baseTableName="moh_device" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_additional_attributes_names_created_by"
+                                 baseTableName="moh_additional_attributes_names" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_attribute_device_id"
+                                 baseTableName="moh_device_attribute" baseColumnNames="device_id"
+                                 referencedTableName="moh_device" referencedColumnNames="device_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_attribute_attribute_id"
+                                 baseTableName="moh_device_attribute" baseColumnNames="attribute_id"
+                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_device_id"
+                                 baseTableName="moh_device_inventory" baseColumnNames="device_id"
+                                 referencedTableName="moh_device" referencedColumnNames="device_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attributes_name_id"
+                                 baseTableName="moh_device_inventory" baseColumnNames="attribute_name_id"
+                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_current_location"
+                                 baseTableName="moh_device_inventory" baseColumnNames="current_location"
+                                 referencedTableName="location" referencedColumnNames="location_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_status_id"
+                                 baseTableName="moh_device_inventory" baseColumnNames="device_status_id"
+                                 referencedTableName="moh_device_status" referencedColumnNames="status_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_created_by"
+                                 baseTableName="moh_device_inventory" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_created_by"
+                                 baseTableName="moh_device_inventory_attribute_answer" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
+                                 baseTableName="moh_device_inventory_attribute_answer" baseColumnNames="inventory_id"
+                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_attribute_name_id"
+                                 baseTableName="moh_device_inventory_attribute_answer"
+                                 baseColumnNames="attribute_name_id"
+                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_maintenance_inventory_id"
+                                 baseTableName="moh_device_maintenance" baseColumnNames="inventory_id"
+                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_maintenance_reported_by"
+                                 baseTableName="moh_device_maintenance" baseColumnNames="reported_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_maintenance_service_by"
+                                 baseTableName="moh_device_maintenance" baseColumnNames="service_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_created_by"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_inventory_id"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="inventory_id"
+                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_received_by"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="received_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_given_by"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="given_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_created_by"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+
+        <addForeignKeyConstraint constraintName="fk_moh_inventory_movement_history_new_location"
+                                 baseTableName="moh_inventory_movement_history" baseColumnNames="new_location"
+                                 referencedTableName="location" referencedColumnNames="location_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_moh_device_status_created_by"
+                                 baseTableName="moh_device_status" baseColumnNames="created_by"
+                                 referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
     </changeSet>
 
 </databaseChangeLog>
