@@ -44,7 +44,24 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
 
     @Override
     public String updateDeviceTypeObject(String deviceTypeBody) {
-        return null;
+        JSONObject itemObject = new JSONObject(deviceTypeBody);
+        if (itemObject.has("type_name") && itemObject.has("type_id")){
+            String status = quizDAO.updateDeviceTypeObject(itemObject.getString("type_name"),itemObject.getString("type_id"));
+            JSONObject statusObject = new JSONObject();
+            String message = "Something went wrong, fail to complete your request, Refresh your browser and try again, if you continue to experience this kind of error contact support team!";
+            if (status.equalsIgnoreCase("success")){
+                message = "Request completed successfully, Device Type details changed!";
+                statusObject.put("message",message);
+                return statusObject.toString();
+            } else {
+                statusObject.put("message",message);
+                return statusObject.toString();
+            }
+        }else{
+            JSONObject statusObject = new JSONObject();
+            statusObject.put("message","All fields are required!");
+            return statusObject.toString();
+        }
     }
 
 

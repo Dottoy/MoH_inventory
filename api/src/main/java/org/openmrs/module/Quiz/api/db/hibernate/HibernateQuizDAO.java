@@ -83,6 +83,20 @@ public class HibernateQuizDAO implements QuizDAO {
         return statusObject.toString();
     }
 
+
+
+    public String updateDeviceTypeObject(String typeName, String type_id) {
+
+        String hql = "update moh_device_type set device_type_name='"+typeName+"' WHERE uuid='"+type_id+"' LIMIT 1";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+          return "success";
+        }else{
+           return "error";
+        }
+
+    }
+
     //moh test query end here
 
 
@@ -98,5 +112,6 @@ public class HibernateQuizDAO implements QuizDAO {
         }
         return result;
     }
+
 
 }
