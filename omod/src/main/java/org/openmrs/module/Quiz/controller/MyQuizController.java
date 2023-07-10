@@ -28,7 +28,7 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceTypeObject(deviceTypeBody);
     }
 
-    @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
+    @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){
         QuizService quizService = Context.getService(QuizService.class);
@@ -75,10 +75,10 @@ public class MyQuizController extends BaseRestController {
     //for get list of attribute name
     @RequestMapping(value="/get_attribute_name", method = RequestMethod.POST)
     @ResponseBody
-    public String getAttributeName(@RequestBody String name)
+    public String getAttributeName()
     {
         QuizService quizService = Context.getService(QuizService.class);
-        List attributeName =  quizService.getAttributeName(name);
+        List attributeName =  quizService.getAttributeName();
         String response;
         if(attributeName!=null)
         {

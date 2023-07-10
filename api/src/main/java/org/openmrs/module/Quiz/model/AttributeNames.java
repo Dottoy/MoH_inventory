@@ -5,8 +5,9 @@ public class AttributeNames {
     private String Description;
     private String Format;
     private String uuid;
-    private String Creator;
+    private int Creator;
     private String CreateDate;
+    private int attributeId;
 
     public String getName() {
         return Name;
@@ -40,11 +41,11 @@ public class AttributeNames {
         this.uuid = uuid;
     }
 
-    public String getCreator() {
+    public int getCreator() {
         return Creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(int creator) {
         Creator = creator;
     }
 
@@ -54,5 +55,13 @@ public class AttributeNames {
 
     public void setCreateDate(String createDate) {
         CreateDate = createDate;
+    }
+
+    public int getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(int attributeId) {
+        this.attributeId = attributeId;
     }
 }
