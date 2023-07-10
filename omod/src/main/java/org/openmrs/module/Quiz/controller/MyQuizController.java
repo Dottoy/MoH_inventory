@@ -30,4 +30,22 @@ public class MyQuizController extends BaseRestController {
         QuizService quizService = Context.getService(QuizService.class);
         return quizService.addItemObject(detailPayload);
     }
+
+    //for create attribute names
+    @RequestMapping(value="/add_attribute_names",  method = RequestMethod.POST)
+    @ResponseBody
+    public String addAttributeNames(@RequestBody String names)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addAttributeNames(names);
+    }
+
+    //for update attribute names
+    @RequestMapping(value="/update_attribute_name",  method = RequestMethod.POST)
+    @ResponseBody
+    public String updateAttributeName(@RequestBody String name)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.updateAttributeName(name);
+    }
 }

@@ -17,4 +17,7 @@ import org.openmrs.module.Quiz.api.QuizService;
 public interface QuizDAO {
      String addItem(String ItemName, String Description);
 
+    String addAttributeNames(String name, String description, String format);
+
+    String updateAttributeName(String name, String description, String format, String uuid);
 }

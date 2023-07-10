@@ -21,4 +21,8 @@ import java.util.List;
 @Transactional
 public interface QuizService extends OpenmrsService {
     String addItemObject(String ItemPayload);
+
+    String addAttributeNames(String names);
+
+    String updateAttributeName(String name);
 }
