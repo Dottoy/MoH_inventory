@@ -15,29 +15,36 @@ import java.util.List;
 
 //https://YOUR_IP_ADDRESS/openmrs/ws/rest/v1/moh/inventory/device
 @Controller
-@RequestMapping(value = "/rest/"+ RestConstants.VERSION_1+"/moh/inventory/device")
+@RequestMapping(value = "/rest/" + RestConstants.VERSION_1 + "/moh/inventory/device")
 public class MohDeviceController extends BaseRestController {
     private final Log log = LogFactory.getLog(this.getClass());
-    @RequestMapping(value="/add_device",  method = RequestMethod.POST)
+
+    @RequestMapping(value = "/add_device", method = RequestMethod.POST)
     @ResponseBody
-    public String addDevice(@RequestBody String detailPayload)
-    {
+    public String addDevice(@RequestBody String detailPayload) {
         QuizService deviceService = Context.getService(QuizService.class);
         return deviceService.addDevice(detailPayload);
     }
 
-    @RequestMapping(value="/update_device",  method = RequestMethod.POST)
+    @RequestMapping(value = "/update_device", method = RequestMethod.POST)
     @ResponseBody
-    public String updateDevice(@RequestBody String detailPayload)
-    {
+    public String updateDevice(@RequestBody String detailPayload) {
         QuizService deviceService = Context.getService(QuizService.class);
         return deviceService.updateDevice(detailPayload);
     }
 
-    @RequestMapping(value="/device_list",  method = RequestMethod.GET)
-    public String deviceList()
-    {
+    @RequestMapping(value = "/device_list", method = RequestMethod.GET)
+    @ResponseBody
+    public String deviceList() {
         QuizService deviceService = Context.getService(QuizService.class);
-        return deviceService.deviceList();
+        List deviceListDetails = deviceService.deviceList();
+        String response;
+        if (deviceListDetails != null) {
+            response = new Gson().toJson(deviceListDetails);
+        } else {
+            List empty = new ArrayList();
+            response = new Gson().toJson(empty);
+        }
+        return response;
     }
 }

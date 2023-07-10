@@ -33,7 +33,7 @@ public interface QuizService extends OpenmrsService {
 
     String updateDevice(String detailPayload);
 
-    String deviceList();
+    List deviceList();
 
     String addAttributeNames(String names);
 

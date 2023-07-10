@@ -18,6 +18,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
+import org.openmrs.module.Quiz.model.MohDeviceDetails;
 import org.openmrs.module.Quiz.model.PersonalDetails;
 
 import java.time.LocalDateTime;
@@ -135,7 +136,23 @@ public class HibernateQuizDAO implements QuizDAO {
     }
 
     @Override
-    public String deviceList() {
+    public List deviceList() {
+        String hql ="SELECT moh_device_type.device_type_name AS deviceTypeName, " +
+                "device_name AS deviceName, " +
+                "moh_device.created_by AS createdBy, " +
+                "moh_device.created_at AS createdAt, " +
+                "moh_device.uuid AS uuid FROM moh_device, moh_device_type " +
+                "WHERE moh_device.device_type_id=moh_device_type.device_type_id" ;
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
         return null;
     }
 

@@ -92,7 +92,7 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     }
 
     @Override
-    public String deviceList() {
+    public List deviceList() {
         return quizDAO.deviceList();
     }
 

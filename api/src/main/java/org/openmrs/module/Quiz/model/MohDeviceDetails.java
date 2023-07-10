@@ -5,9 +5,10 @@ import java.util.Date;
 public class MohDeviceDetails {
     private int deviceTypeId;
     private String deviceName;
+    private String deviceTypeName;
     private int createdBy;
     private Date createdAt;
-
+    private String uuid;
     public int getDeviceTypeId() {
         return deviceTypeId;
     }
@@ -15,7 +16,13 @@ public class MohDeviceDetails {
     public void setDeviceTypeId(int deviceTypeId) {
         this.deviceTypeId = deviceTypeId;
     }
+    public String getDeviceTypeName() {
+        return deviceTypeName;
+    }
 
+    public void setDeviceTypeName(String deviceTypeName) {
+        this.deviceTypeName = deviceTypeName;
+    }
     public String getDeviceName() {
         return deviceName;
     }
@@ -48,6 +55,6 @@ public class MohDeviceDetails {
         this.uuid = uuid;
     }
 
-    private String uuid;
+
 
 }
