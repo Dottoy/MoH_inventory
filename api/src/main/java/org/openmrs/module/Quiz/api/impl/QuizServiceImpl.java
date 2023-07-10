@@ -34,6 +34,20 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         this.quizDAO = quizDAO;
     }
 
+
+
+    @Override
+    public String addDeviceTypeObject(String deviceTypeBody) {
+        JSONObject itemObject = new JSONObject(deviceTypeBody);
+        return quizDAO.addDeviceType(itemObject.getString("type_name"));
+    }
+
+    @Override
+    public String updateDeviceTypeObject(String deviceTypeBody) {
+        return null;
+    }
+
+
     @Override
     public String addItemObject(String ItemPayload){
         JSONObject itemObject = new JSONObject(ItemPayload);
