@@ -66,6 +66,28 @@ public class HibernateQuizDAO implements QuizDAO {
         return session.createSQLQuery(hql);
     }
 
+
+    //moh test query start here
+    public String addDeviceType(String type_name){
+        //check if device type is already registered
+        JSONObject statusObject = new JSONObject();
+        String message = "failed";
+        String hql = "insert into moh_device_type (device_type_name, created_by, created_at, uuid) " +
+                " values ('" + type_name + "'," + Context.getAuthenticatedUser().getUserId() + ", now(),uuid())";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+            message = "Request completed successfully, Device type registered";
+            statusObject.put("message",message);
+        }
+        statusObject.put("message",message);
+        return statusObject.toString();
+    }
+
+    //moh test query end here
+
+
+
+
     public String addItem(String ItemName, String Description) {
         String result = "failed";
         String hql = "insert into test_item (item_name, description, created_by, date_created, uuid) " +

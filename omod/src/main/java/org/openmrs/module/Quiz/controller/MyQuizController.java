@@ -15,10 +15,32 @@ import java.util.List;
 
 //https://YOUR_IP_ADDRESS/openmrs/ws/rest/v1/quiz/test/add_item
 @Controller
-@RequestMapping(value = "/rest/"+ RestConstants.VERSION_1+"/quiz/test")
+@RequestMapping(value = "/rest/"+ RestConstants.VERSION_1+"/moh/inventory/")
 public class MyQuizController extends BaseRestController {
 
     private final Log log = LogFactory.getLog(this.getClass());
+
+    //moh inventory functions start here
+    @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceTypeObject(@RequestBody String deviceTypeBody){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceTypeObject(deviceTypeBody);
+    }
+
+    @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceTypeObject(deviceTypeBody);
+    }
+    //moh inventory functions end here
+
+
+
+
+
+
 
     /*
        GUIZ 2

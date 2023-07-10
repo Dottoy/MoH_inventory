@@ -20,6 +20,14 @@ import java.util.List;
 
 @Transactional
 public interface QuizService extends OpenmrsService {
+
+    //function for moh test goes here
+    String addDeviceTypeObject(String deviceTypeBody);
+
+    String updateDeviceTypeObject(String deviceTypeBody);
+
+    //function for moh test end here
+
     String addItemObject(String ItemPayload);
 
     String addAttributeNames(String names);

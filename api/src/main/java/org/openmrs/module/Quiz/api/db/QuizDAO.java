@@ -15,6 +15,11 @@ import org.openmrs.module.Quiz.api.QuizService;
  *  Database methods for {@link QuizService}.
  */
 public interface QuizDAO {
+
+     //moh functions start here
+     String addDeviceType(String type_name);
+     //moh functions end here
+
      String addItem(String ItemName, String Description);
 
     String addAttributeNames(String name, String description, String format);
