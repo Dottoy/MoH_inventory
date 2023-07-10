@@ -1,0 +1,9 @@
+quiz/.idea
+*.iws
+*.iml
+*.ipr
+*.properties
+/target/
+*/target/**
+quiz/omod/target
+quiz/api/target
