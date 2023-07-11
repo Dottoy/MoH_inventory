@@ -236,7 +236,7 @@ public class HibernateQuizDAO implements QuizDAO {
 
         DbSession dbSession = getSessionFactory().getCurrentSession();
 //        dbSession.beginTransaction();
-        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
+        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "'";
         Query query = dbSession.createQuery(hql_device);
         String result = (String) query.uniqueResult();
 //        dbSession.getTransaction().commit();
