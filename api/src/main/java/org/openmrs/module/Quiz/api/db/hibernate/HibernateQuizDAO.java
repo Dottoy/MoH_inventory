@@ -85,6 +85,20 @@ public class HibernateQuizDAO implements QuizDAO {
         return statusObject.toString();
     }
 
+
+
+    public String updateDeviceTypeObject(String typeName, String type_id) {
+
+        String hql = "update moh_device_type set device_type_name='"+typeName+"' WHERE uuid='"+type_id+"' LIMIT 1";
+        int rowsAffected = createSQLQuery(hql).executeUpdate();
+        if (rowsAffected >= 1) {
+          return "success";
+        }else{
+           return "error";
+        }
+
+    }
+
     //moh test query end here
 
 
@@ -101,6 +115,8 @@ public class HibernateQuizDAO implements QuizDAO {
         return result;
     }
 
+<<<<<<< HEAD
+=======
     public String addDevice(Integer device_type_id, String device_name) {
         JSONObject statusObject = new JSONObject();
         String hql = "insert into moh_device (device_type_id, device_name, created_by, created_at, uuid) " +
@@ -210,6 +226,7 @@ public class HibernateQuizDAO implements QuizDAO {
         }
         return null;
     }
+>>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
 
     //for create moh_device_status
     @Override

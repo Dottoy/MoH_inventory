@@ -32,7 +32,7 @@ public class MyQuizController extends BaseRestController {
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){
         QuizService quizService = Context.getService(QuizService.class);
-        return quizService.addDeviceTypeObject(deviceTypeBody);
+        return quizService.updateDeviceTypeObject(deviceTypeBody);
     }
     //moh inventory functions end here
 

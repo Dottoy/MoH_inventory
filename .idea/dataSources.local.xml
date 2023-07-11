@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
+  <component name="dataSourceStorageLocal" created-in="IU-231.9161.38">
+    <data-source name="Test" uuid="dd2e0fc5-51ad-4700-b4b5-8e02c86b2f51">
+      <database-info product="MySQL" version="5.6.36" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.25 (Revision: 08be9e9b4cba6aa115f9b27b215887af40b159e0)" dbms="MYSQL" exact-version="5.6.36" exact-driver-version="8.0">
+=======
   <component name="dataSourceStorageLocal">
     <data-source name="openmrs@localhost" uuid="5682d005-7675-4ff8-a990-cebac5a6be29">
       <database-info product="MySQL" version="5.6.36" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.21 (Revision: 33f65445a1bcc544eb0120491926484da168f199)" dbms="MYSQL" exact-version="5.6.36" exact-driver-version="8.0">
+>>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
@@ -16,7 +22,11 @@
       </schema-mapping>
       <ssh-properties>
         <enabled>true</enabled>
+<<<<<<< HEAD
+        <ssh-config-id>17b82912-c397-45c8-8efc-3a9d5185dd63</ssh-config-id>
+=======
         <ssh-config-id>bcc96bcb-f15a-490a-94a0-ba377b132047</ssh-config-id>
+>>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
       </ssh-properties>
     </data-source>
   </component>
