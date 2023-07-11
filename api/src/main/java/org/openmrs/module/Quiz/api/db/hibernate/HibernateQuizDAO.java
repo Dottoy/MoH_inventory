@@ -328,7 +328,7 @@ public class HibernateQuizDAO implements QuizDAO {
         DbSession session=sessionFactory.getCurrentSession();
         Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
         List results=query.list();
-        if(results!=null)
+        if(results.size()>0)
         {
             return "exist";
         }else{
