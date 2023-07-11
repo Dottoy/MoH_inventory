@@ -33,4 +33,10 @@ public interface QuizDAO {
     String updateAttributeName(String name, String description, String format, String uuid);
 
     List getAttributeName();
+
+    String addDeviceStatus(String status_name);
+
+    String updateDeviceStatus(String status_name, String uuid);
+
+    List getDeviceStatus();
 }

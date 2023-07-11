@@ -41,4 +41,10 @@ public interface QuizService extends OpenmrsService {
 
 
     List getAttributeName();
+
+    String addDeviceStatus(String status);
+
+    String updateDeviceStatus(String status);
+
+    List getDeviceStatus();
 }

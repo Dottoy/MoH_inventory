@@ -211,4 +211,58 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+    //for create moh_device_status
+    @Override
+    public String addDeviceStatus(String status_name) {
+        JSONObject res = new JSONObject();
+        String answ = "insert into moh_device_status (status_name, created_by, created_at, uuid) " +
+                " values ('" + status_name + "','" + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(answ).executeUpdate();
+        if (rowsAffected >= 1) {
+            res.put("status","success");
+            res.put("statusCode",200);
+            res.put("message","Success");
+        }else{
+            res.put("status","failed");
+            res.put("statusCode",500);
+            res.put("message","Problem on insert Data");
+        }
+        return res.toString();
+    }
+
+    @Override
+    public String updateDeviceStatus(String status_name, String uuid) {
+        String res;
+        String ans = "update moh_device_status set status_name = '"+status_name+"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public List getDeviceStatus() {
+        String hql;
+        hql ="select status_name as 'Name', created_by as Creator, created_at as 'CreateDate', uuid as 'uuid'  " +
+                "from moh_device_status";
+
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
 }

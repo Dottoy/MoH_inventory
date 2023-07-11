@@ -144,4 +144,53 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     public List getAttributeName() {
         return quizDAO.getAttributeName();
     }
+
+    @Override
+    public String addDeviceStatus(String status) {
+        JSONObject deviceStatus = new JSONObject(status);
+        if (deviceStatus.has("status_name"))
+        {
+            return quizDAO.addDeviceStatus(deviceStatus.getString("status_name"));
+        }
+        else
+        {
+            JSONObject statusObject = new JSONObject();
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Incorrect Object Provided");
+            return statusObject.toString();
+        }
+    }
+
+    @Override
+    public String updateDeviceStatus(String status) {
+        JSONObject deviceStatus = new JSONObject(status);
+        JSONObject statusObject = new JSONObject();
+        if (deviceStatus.has("status_name") && deviceStatus.has("uuid")){
+            String res = quizDAO.updateDeviceStatus(deviceStatus.getString("status_name"),deviceStatus.getString("uuid"));
+            if (res.equalsIgnoreCase("success"))
+            {
+                statusObject.put("status","success");
+                statusObject.put("statusCode",200);
+                statusObject.put("message","Device status updated successfully");
+                return statusObject.toString();
+            }
+            else {
+                statusObject.put("status","failed");
+                statusObject.put("statusCode",500);
+                statusObject.put("message","Failed to update device status");
+                return statusObject.toString();
+            }
+        }
+
+        statusObject.put("status","failed");
+        statusObject.put("statusCode",1000);
+        statusObject.put("message","Important parameters are missing!");
+        return statusObject.toString();
+    }
+
+    @Override
+    public List getDeviceStatus() {
+        return quizDAO.getDeviceStatus();
+    }
 }

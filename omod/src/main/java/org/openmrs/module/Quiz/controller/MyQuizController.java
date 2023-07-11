@@ -90,4 +90,42 @@ public class MyQuizController extends BaseRestController {
         }
         return response;
     }
+
+    //for create moh_device_status table
+    @RequestMapping(value="/add_device_status",  method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceStatus(@RequestBody String status)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceStatus(status);
+    }
+    //update device status
+    @RequestMapping(value="/update_device_status",  method = RequestMethod.POST)
+    @ResponseBody
+    public String updateDeviceStatus(@RequestBody String status)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.updateDeviceStatus(status);
+    }
+
+    //list all available status
+    @RequestMapping(value="/get_device _status", method = RequestMethod.POST)
+    @ResponseBody
+    public String getDeviceStatus()
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        List statusList =  quizService.getDeviceStatus();
+        String response;
+        if(statusList!=null)
+        {
+            response=new Gson().toJson(statusList);
+        }
+        else{
+            List empty = new ArrayList();
+            response = new Gson().toJson(empty);
+        }
+        return response;
+    }
+
 }
+
