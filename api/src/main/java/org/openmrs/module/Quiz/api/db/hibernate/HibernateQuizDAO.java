@@ -327,8 +327,10 @@ public class HibernateQuizDAO implements QuizDAO {
         DbSession session=sessionFactory.getCurrentSession();
         Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
         List results=query.list();
-        if(results==null)
+        if(results!=null)
         {
+            return "exist";
+        }else{
             String answ = "insert into moh_device_attribute (device_id, attribute_id) " +
                     " values (" + deviceId + "," + attributeId + ")";
             int rowsAffected = createSQLQuery(answ).executeUpdate();
@@ -336,9 +338,22 @@ public class HibernateQuizDAO implements QuizDAO {
                 return "success";
             }
             return "failed";
-        }else{
-            return "exist";
         }
     }
 
+
+    public List getDeviceTypeList(){
+        String hql ="select * from moh_device_type order by device_type_name asc" ;
+        DbSession session   =   sessionFactory.getCurrentSession();
+        Query query         =   session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceType.class));
+        List info           =   query.list();
+        if(info!=null)
+        {
+            if(info.size()>0)
+            {
+                return info;
+            }
+        }
+        return null;
+    }
 }

@@ -7,6 +7,16 @@ public class MohDeviceType {
     private Date created_at;
     private String uuid;
 
+    public Integer getDevice_type_id() {
+        return device_type_id;
+    }
+
+    public void setDevice_type_id(Integer device_type_id) {
+        this.device_type_id = device_type_id;
+    }
+
+    private Integer device_type_id;
+
     public String getDevice_type_name() {
         return device_type_name;
     }

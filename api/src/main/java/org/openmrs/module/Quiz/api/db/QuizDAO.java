@@ -55,4 +55,5 @@ public interface QuizDAO {
 
     List getDeviceStatus();
 
+    List getDeviceTypeList();
 }

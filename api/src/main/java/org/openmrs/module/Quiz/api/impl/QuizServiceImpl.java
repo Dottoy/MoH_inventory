@@ -255,4 +255,8 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     public List getDeviceStatus() {
         return quizDAO.getDeviceStatus();
     }
+
+    public List deviceTypeList() {
+        return quizDAO.getDeviceTypeList();
+    }
 }
