@@ -183,6 +183,21 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="mafuru" id="add_pk_moh_device_inventory_attribute_answer">
+        <addPrimaryKey
+                columnNames="inventory_id"
+                constraintName="pk_constraint_inventory_id"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+    <changeSet author="MAFURU" id="alter_attribute_value">
+        <modifyDataType
+                columnName="attribute_value"
+                newDataType="varchar(255)"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+
     <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -256,6 +271,13 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="mafuru" id="add_moh_inventory_movement_history_movement_id">
+        <addColumn tableName="moh_inventory_movement_history">
+            <column name="movement_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
     <changeSet id="moh_device_status" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>

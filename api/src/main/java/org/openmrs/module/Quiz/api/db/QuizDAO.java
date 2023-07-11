@@ -42,4 +42,8 @@ public interface QuizDAO {
     String updateDeviceStatus(String status_name, String uuid);
 
     List getDeviceStatus();
+
+    String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value);
+
+    List getDeviceInventoryAnswers();
 }
