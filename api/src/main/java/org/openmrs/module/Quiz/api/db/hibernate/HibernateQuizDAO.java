@@ -232,11 +232,35 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public String setDeviceAttribute(String deviceUuid, String attributeUuid) {
-        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
         String hql_attribute = "select attribute_id as attributeId from moh_additional_attributes_names where uuid='" + attributeUuid + "' LIMIT 1";
 
         DbSession dbSession = getSessionFactory().getCurrentSession();
-        List results_device = dbSession.createSQLQuery(hql_device).addScalar("deviceId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
+//        dbSession.beginTransaction();
+        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
+        Query query = dbSession.createQuery(hql_device);
+        String result = (String) query.uniqueResult();
+//        dbSession.getTransaction().commit();
+//
+//        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+//        session.beginTransaction();
+//
+//        Query<String> query = session.createQuery("SELECT columnName FROM YourEntity WHERE condition = :conditionValue", String.class);
+//        query.setParameter("conditionValue", conditionValue);
+//        String result = query.uniqueResult();
+//
+//        session.getTransaction().commit();
+        return result;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //        List results_attribute = dbSession.createSQLQuery(hql_device).addScalar("attributeId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
 //        log.info(results_device);
 //        log.info(results_attribute);
@@ -252,7 +276,7 @@ public class HibernateQuizDAO implements QuizDAO {
 //        return 1;
 
 
-        return null;
+//        return null;
     }
 
     //for create moh_device_status
