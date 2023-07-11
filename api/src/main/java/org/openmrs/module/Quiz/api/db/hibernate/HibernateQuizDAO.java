@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.json.JSONObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
@@ -115,8 +116,6 @@ public class HibernateQuizDAO implements QuizDAO {
         return result;
     }
 
-<<<<<<< HEAD
-=======
     public String addDevice(Integer device_type_id, String device_name) {
         JSONObject statusObject = new JSONObject();
         String hql = "insert into moh_device (device_type_id, device_name, created_by, created_at, uuid) " +
@@ -226,7 +225,31 @@ public class HibernateQuizDAO implements QuizDAO {
         }
         return null;
     }
->>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
+
+    @Override
+    public String setDeviceAttribute(String deviceUuid, String attributeUuid) {
+        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
+        String hql_attribute = "select attribute_id as attributeId from moh_additional_attributes_names where uuid='" + attributeUuid + "' LIMIT 1";
+
+        DbSession dbSession = getSessionFactory().getCurrentSession();
+        List results_device = dbSession.createSQLQuery(hql_device).addScalar("deviceId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
+//        List results_attribute = dbSession.createSQLQuery(hql_device).addScalar("attributeId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
+//        log.info(results_device);
+//        log.info(results_attribute);
+
+//
+//        if (results.size() > 0) {
+//            Iterator iterator = results.iterator();
+//            ReceiptAuthorizationRaw receiptAuthorizationRaw = (ReceiptAuthorizationRaw) iterator.next();
+//            if (receiptAuthorizationRaw != null)
+//                if (receiptAuthorizationRaw.getPrintNo() > 0)
+//                    return (receiptAuthorizationRaw.getPrintNo()) + 1;
+//        }
+//        return 1;
+
+
+        return null;
+    }
 
     //for create moh_device_status
     @Override

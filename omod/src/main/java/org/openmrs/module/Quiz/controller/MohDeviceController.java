@@ -47,4 +47,11 @@ public class MohDeviceController extends BaseRestController {
         }
         return response;
     }
+
+    @RequestMapping(value = "/set_device_attribute", method = RequestMethod.POST)
+    @ResponseBody
+    public String setDeviceAttribute(@RequestBody String detailPayload) {
+        QuizService deviceService = Context.getService(QuizService.class);
+        return deviceService.setDeviceAttribute(detailPayload);
+    }
 }

@@ -42,4 +42,7 @@ public interface QuizDAO {
     String updateDeviceStatus(String status_name, String uuid);
 
     List getDeviceStatus();
+
+
+    String setDeviceAttribute(String deviceUuid, String attributeUuid);
 }

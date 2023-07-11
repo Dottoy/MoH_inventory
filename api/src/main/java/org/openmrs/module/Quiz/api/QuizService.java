@@ -39,6 +39,8 @@ public interface QuizService extends OpenmrsService {
 
     String updateAttributeName(String name);
 
+    String setDeviceAttribute(String detailPayload);
+
 
     List getAttributeName();
 
