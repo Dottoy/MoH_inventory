@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.json.JSONObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
@@ -21,8 +22,11 @@ import org.openmrs.module.Quiz.api.db.QuizDAO;
 import org.openmrs.module.Quiz.model.AttributeNames;
 import org.openmrs.module.Quiz.model.DeviceAnswers;
 import org.openmrs.module.Quiz.model.MohDeviceDetails;
+import org.openmrs.module.Quiz.model.MohDeviceType;
+import org.openmrs.module.Quiz.model.PersonalDetails;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -98,6 +102,8 @@ public class HibernateQuizDAO implements QuizDAO {
         }
 
     }
+
+
 
     //moh test query end here
 
@@ -226,6 +232,42 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+    @Override
+    public MohDeviceDetails setDeviceId(String deviceUuid) {
+        String hql_device = "select device_id as 'deviceId' from moh_device where uuid='" + deviceUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (MohDeviceDetails) iterator.next();
+            }
+        }
+        return null;
+
+    }
+
+    @Override
+    public AttributeNames setDeviceAttribute(String attributeUuid) {
+        String hql_device = "select attribute_id as 'attributeId' from moh_additional_attributes_names where uuid='" + attributeUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (AttributeNames) iterator.next();
+            }
+        }
+        return null;
+
+    }
+
     //for create moh_device_status
     @Override
     public String addDeviceStatus(String status_name) {
@@ -280,6 +322,41 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+    @Override
+    public String setDeviceAttribute(int deviceId, int attributeId) {
+        String hql_device = "select attribute_id as 'attributeId' from moh_device_attribute where attribute_id='" + attributeId + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            return "exist";
+        }else{
+            String answ = "insert into moh_device_attribute (device_id, attribute_id) " +
+                    " values (" + deviceId + "," + attributeId + ")";
+            int rowsAffected = createSQLQuery(answ).executeUpdate();
+            if (rowsAffected >= 1) {
+                return "success";
+            }
+            return "failed";
+        }
+    }
+
+
+    public List getDeviceTypeList(){
+        String hql ="select * from moh_device_type order by device_type_name asc" ;
+        DbSession session   =   sessionFactory.getCurrentSession();
+        Query query         =   session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceType.class));
+        List info           =   query.list();
+        if(info!=null)
+        {
+            if(info.size()>0)
+            {
+                return info;
+            }
+        }
+        return null;
+    }
     //for moh_device_inventory_attribute_answer table
     @Override
     public String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value) {

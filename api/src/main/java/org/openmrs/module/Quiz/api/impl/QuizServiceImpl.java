@@ -9,10 +9,14 @@
  */
 package org.openmrs.module.Quiz.api.impl;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.Quiz.api.QuizService;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
+import org.openmrs.module.Quiz.model.AttributeNames;
+import org.openmrs.module.Quiz.model.MohDeviceDetails;
+import org.openmrs.module.Quiz.util.DateUtil;
 
 import java.util.List;
 
@@ -162,6 +166,48 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     }
 
     @Override
+    public String setDeviceAttribute(String detailPayload) {
+        JSONObject attributeObject = new JSONObject(detailPayload);
+        if (attributeObject.has("attributes")){
+            JSONArray attributesArray = attributeObject.getJSONArray("attributes");
+            if (attributesArray.length() > 0){
+                String status = "";
+                for (Object a : attributesArray){
+                    JSONObject attributesObject = (JSONObject)a;
+
+                    if (attributesObject.has("deviceUuid") && attributesObject.has("attributeUuid")){
+                        status = "attributeUuid";
+                        MohDeviceDetails deviceId =  quizDAO.setDeviceId(attributesObject.getString("deviceUuid"));
+                        AttributeNames attributeId = quizDAO.setDeviceAttribute(attributesObject.getString("attributeUuid"));
+
+                        if (deviceId != null && attributeId != null){
+                            status = quizDAO.setDeviceAttribute(deviceId.getDeviceId(), attributeId.getAttributeId());
+                        }
+                    }
+                }
+//                    return  status;
+                JSONObject statusObject = new JSONObject();
+                if (status.equalsIgnoreCase("success")){
+                    statusObject.put("status","success");
+                    statusObject.put("message","attribute set successfully");
+                    statusObject.put("statusCode",200);
+                }else if(status.equalsIgnoreCase("exist")){
+                    statusObject.put("status","failed");
+                    statusObject.put("message","Record Exist");
+                    statusObject.put("statusCode",401);
+                }else {
+                    statusObject.put("status","failed");
+                    statusObject.put("message","failed to set attribute");
+                    statusObject.put("statusCode",500);
+                }
+                return statusObject.toString();
+
+            }
+        }
+        return null;
+    }
+
+    @Override
     public String addDeviceStatus(String status) {
         JSONObject deviceStatus = new JSONObject(status);
         if (deviceStatus.has("status_name"))
@@ -208,6 +254,10 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     @Override
     public List getDeviceStatus() {
         return quizDAO.getDeviceStatus();
+    }
+
+    public List deviceTypeList() {
+        return quizDAO.getDeviceTypeList();
     }
 
     @Override

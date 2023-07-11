@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
+import org.openmrs.module.Quiz.model.AttributeNames;
+import org.openmrs.module.Quiz.model.MohDeviceDetails;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public interface QuizDAO {
      String addDeviceType(String type_name);
 
      String updateDeviceTypeObject(String typeName, String type_id);
+
+
      //moh functions end here
 
      String addItem(String ItemName, String Description);
@@ -37,11 +41,21 @@ public interface QuizDAO {
 
     List getAttributeName();
 
+
+    MohDeviceDetails setDeviceId(String deviceUuid);
+
+    AttributeNames setDeviceAttribute(String attributeUuid);
+
+    String setDeviceAttribute(int deviceId, int attributeId);
+
+
     String addDeviceStatus(String status_name);
 
     String updateDeviceStatus(String status_name, String uuid);
 
     List getDeviceStatus();
+
+    List getDeviceTypeList();
 
     String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value);
 
