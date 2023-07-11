@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-<<<<<<< HEAD
-    <data-source source="LOCAL" name="Test" uuid="dd2e0fc5-51ad-4700-b4b5-8e02c86b2f51">
-=======
-    <data-source source="LOCAL" name="openmrs@localhost" uuid="5682d005-7675-4ff8-a990-cebac5a6be29">
->>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
+    <data-source source="LOCAL" name="openmrs@localhost" uuid="65e08ce0-42d6-4a1d-bd34-e51129e96105">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/openmrs</jdbc-url>
-<<<<<<< HEAD
-      <working-dir>$ProjectFileDir$</working-dir>
-=======
->>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
     </data-source>
   </component>
 </project>

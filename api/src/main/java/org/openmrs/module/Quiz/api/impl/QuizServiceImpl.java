@@ -259,4 +259,27 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     public List deviceTypeList() {
         return quizDAO.getDeviceTypeList();
     }
+
+    @Override
+    public String addDeviceInventoryAnswer(String answers) {
+        JSONObject inventoryAnswers = new JSONObject(answers);
+        if(inventoryAnswers.has("attribute_name_id") && inventoryAnswers.has("attribute_value"))
+        {
+            return quizDAO.addDeviceInventoryAnswer(inventoryAnswers.getInt("attribute_name_id"),inventoryAnswers.getString("attribute_value"));
+        }
+        else
+        {
+            JSONObject statusObject = new JSONObject();
+            statusObject.put("status","failed");
+            statusObject.put("statusCode",500);
+            statusObject.put("message","Incorrect Object Provided");
+            return statusObject.toString();
+        }
+    }
+
+    @Override
+    public List getDeviceInventoryAnswers() {
+        return quizDAO.getDeviceInventoryAnswers();
+    }
+
 }

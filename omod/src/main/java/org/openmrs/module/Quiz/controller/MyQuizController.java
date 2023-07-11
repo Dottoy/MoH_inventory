@@ -71,7 +71,7 @@ public class MyQuizController extends BaseRestController {
     }
 
     //for get list of attribute name
-    @RequestMapping(value="/get_attribute_name", method = RequestMethod.POST)
+    @RequestMapping(value="/get_attribute_name", method = RequestMethod.GET)
     @ResponseBody
     public String getAttributeName()
     {
@@ -107,7 +107,7 @@ public class MyQuizController extends BaseRestController {
     }
 
     //list all available status
-    @RequestMapping(value="/get_device _status", method = RequestMethod.POST)
+    @RequestMapping(value="/get_device _status", method = RequestMethod.GET)
     @ResponseBody
     public String getDeviceStatus()
     {
@@ -124,6 +124,30 @@ public class MyQuizController extends BaseRestController {
         }
         return response;
     }
-
+    //for moh_device_inventory_attribute_answer table
+    @RequestMapping(value ="/add_device_inventory_answer",  method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceInventoryAnswer(@RequestBody String answers)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceInventoryAnswer(answers);
+    }
+    @RequestMapping(value = "/get_device_inventory_answer" , method = RequestMethod.GET)
+    @ResponseBody
+    public String deviceInventoryAnswers()
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        List answers =  quizService.getDeviceInventoryAnswers();
+        String response;
+        if(answers!=null)
+        {
+            response=new Gson().toJson(answers);
+        }
+        else{
+            List empty = new ArrayList();
+            response = new Gson().toJson(empty);
+        }
+        return response;
+    }
 }
 

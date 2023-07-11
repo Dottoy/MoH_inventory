@@ -20,6 +20,7 @@ import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
 import org.openmrs.module.Quiz.model.AttributeNames;
+import org.openmrs.module.Quiz.model.DeviceAnswers;
 import org.openmrs.module.Quiz.model.MohDeviceDetails;
 import org.openmrs.module.Quiz.model.MohDeviceType;
 import org.openmrs.module.Quiz.model.PersonalDetails;
@@ -327,7 +328,7 @@ public class HibernateQuizDAO implements QuizDAO {
         DbSession session=sessionFactory.getCurrentSession();
         Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
         List results=query.list();
-        if(results!=null)
+        if(results.size()>0)
         {
             return "exist";
         }else{
@@ -356,4 +357,42 @@ public class HibernateQuizDAO implements QuizDAO {
         }
         return null;
     }
+    //for moh_device_inventory_attribute_answer table
+    @Override
+    public String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value) {
+        JSONObject res = new JSONObject();
+        String answ = "insert into moh_device_inventory_attribute_answer (attribute_name_id, attribute_value, created_by, created_at, uuid) " +
+                " values (" + attribute_name_id + ",'"+ attribute_value +"'," + Context.getAuthenticatedUser().getUserId() + ", current_date(), uuid())";
+        int rowsAffected = createSQLQuery(answ).executeUpdate();
+        if (rowsAffected >= 1) {
+            res.put("status","success");
+            res.put("statusCode",200);
+            res.put("message","Success added data");
+        }else{
+            res.put("status","failed");
+            res.put("statusCode",500);
+            res.put("message","Problem on insert Data");
+        }
+        return res.toString();
+    }
+
+    @Override
+    public List getDeviceInventoryAnswers() {
+        String hql;
+        hql ="select attribute_name_id as 'AttributeName',attribute_value as 'AttributeValue', created_by as Creator, created_at as 'CreateDate', uuid as 'uuid'  " +
+                "from moh_device_inventory_attribute_answer";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(DeviceAnswers.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
+
 }

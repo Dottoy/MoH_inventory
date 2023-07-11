@@ -56,4 +56,8 @@ public interface QuizDAO {
     List getDeviceStatus();
 
     List getDeviceTypeList();
+
+    String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value);
+
+    List getDeviceInventoryAnswers();
 }
