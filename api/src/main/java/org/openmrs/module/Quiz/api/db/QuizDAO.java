@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
+import org.openmrs.module.Quiz.model.AttributeNames;
+import org.openmrs.module.Quiz.model.MohDeviceDetails;
 
 import java.util.List;
 
@@ -40,7 +42,11 @@ public interface QuizDAO {
     List getAttributeName();
 
 
-    String setDeviceAttribute(String deviceUuid, String attributeUuid);
+    MohDeviceDetails setDeviceId(String deviceUuid);
+
+    AttributeNames setDeviceAttribute(String attributeUuid);
+
+    String setDeviceAttribute(int deviceId, int attributeId);
 
 
     String addDeviceStatus(String status_name);
