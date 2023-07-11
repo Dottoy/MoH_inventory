@@ -20,6 +20,7 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
 import org.openmrs.module.Quiz.model.AttributeNames;
 import org.openmrs.module.Quiz.model.MohDeviceDetails;
+import org.openmrs.module.Quiz.model.MohDeviceType;
 import org.openmrs.module.Quiz.model.PersonalDetails;
 
 
@@ -99,6 +100,8 @@ public class HibernateQuizDAO implements QuizDAO {
 
     }
 
+
+
     //moh test query end here
 
 
@@ -115,8 +118,7 @@ public class HibernateQuizDAO implements QuizDAO {
         return result;
     }
 
-<<<<<<< HEAD
-=======
+
     public String addDevice(Integer device_type_id, String device_name) {
         JSONObject statusObject = new JSONObject();
         String hql = "insert into moh_device (device_type_id, device_name, created_by, created_at, uuid) " +
@@ -226,6 +228,6 @@ public class HibernateQuizDAO implements QuizDAO {
         }
         return null;
     }
->>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
+
 
 }

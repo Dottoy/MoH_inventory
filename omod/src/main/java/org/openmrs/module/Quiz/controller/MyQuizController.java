@@ -21,6 +21,8 @@ public class MyQuizController extends BaseRestController {
     private final Log log = LogFactory.getLog(this.getClass());
 
     //moh inventory functions start here
+
+
     @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
     @ResponseBody
     public String addDeviceTypeObject(@RequestBody String deviceTypeBody){
@@ -35,10 +37,6 @@ public class MyQuizController extends BaseRestController {
         return quizService.updateDeviceTypeObject(deviceTypeBody);
     }
     //moh inventory functions end here
-
-
-
-
 
 
 

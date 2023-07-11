@@ -22,15 +22,14 @@ public interface QuizDAO {
      String addDeviceType(String type_name);
 
      String updateDeviceTypeObject(String typeName, String type_id);
+
+
      //moh functions end here
 
      String addItem(String ItemName, String Description);
      String addDevice(Integer device_type_id, String device_name);
 
-<<<<<<< HEAD
 
-
-=======
      String updateDevice(String uuid, int deviceTypeId, String deviceName);
 
      List deviceList();
@@ -39,5 +38,5 @@ public interface QuizDAO {
     String updateAttributeName(String name, String description, String format, String uuid);
 
     List getAttributeName();
->>>>>>> 05181f639106f6aeff4bc75641b076e1fafc631c
+
 }
