@@ -40,12 +40,13 @@ public interface QuizDAO {
     List getAttributeName();
 
 
+    String setDeviceAttribute(String deviceUuid, String attributeUuid);
+
+
     String addDeviceStatus(String status_name);
 
     String updateDeviceStatus(String status_name, String uuid);
 
     List getDeviceStatus();
 
-
-    String setDeviceAttribute(String deviceUuid, String attributeUuid);
 }

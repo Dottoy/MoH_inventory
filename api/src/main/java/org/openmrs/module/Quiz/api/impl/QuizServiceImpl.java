@@ -175,7 +175,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             return statusObject.toString();
         }
     }
-
     @Override
     public String addDeviceStatus(String status) {
         JSONObject deviceStatus = new JSONObject(status);

@@ -230,7 +230,6 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
-
     @Override
     public String setDeviceAttribute(String deviceUuid, String attributeUuid) {
         String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
