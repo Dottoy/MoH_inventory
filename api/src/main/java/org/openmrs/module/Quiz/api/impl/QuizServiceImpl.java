@@ -168,6 +168,7 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         if (itemObject.has("device_uuid") && itemObject.has("attribute_uuid")){
             return quizDAO.setDeviceAttribute(itemObject.getString("device_uuid"), itemObject.getString("attribute_uuid"));
         }else{
+//            println()
             JSONObject statusObject = new JSONObject();
             statusObject.put("status","failed");
             statusObject.put("statusCode",500);
