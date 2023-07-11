@@ -3,6 +3,15 @@ package org.openmrs.module.Quiz.model;
 import java.util.Date;
 
 public class MohDeviceDetails {
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    private int deviceId;
     private int deviceTypeId;
     private String deviceName;
     private String deviceTypeName;

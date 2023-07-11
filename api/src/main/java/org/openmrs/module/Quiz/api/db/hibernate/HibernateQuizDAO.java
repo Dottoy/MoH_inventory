@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.json.JSONObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
@@ -229,5 +230,84 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+
+    @Override
+    public String setDeviceAttribute(String deviceUuid, String attributeUuid) {
+        String hql_device = "select device_id as deviceId from moh_device where uuid='" + deviceUuid + "' LIMIT 1";
+        String hql_attribute = "select attribute_id as attributeId from moh_additional_attributes_names where uuid='" + attributeUuid + "' LIMIT 1";
+
+        DbSession dbSession = getSessionFactory().getCurrentSession();
+        List results_device = dbSession.createSQLQuery(hql_device).addScalar("deviceId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
+//        List results_attribute = dbSession.createSQLQuery(hql_device).addScalar("attributeId", IntegerType.INSTANCE).setResultTransformer(Transformers.aliasToBean(MohDeviceDetails.class)).list();
+//        log.info(results_device);
+//        log.info(results_attribute);
+
+//
+//        if (results.size() > 0) {
+//            Iterator iterator = results.iterator();
+//            ReceiptAuthorizationRaw receiptAuthorizationRaw = (ReceiptAuthorizationRaw) iterator.next();
+//            if (receiptAuthorizationRaw != null)
+//                if (receiptAuthorizationRaw.getPrintNo() > 0)
+//                    return (receiptAuthorizationRaw.getPrintNo()) + 1;
+//        }
+//        return 1;
+
+
+        return null;
+    }
+
+    //for create moh_device_status
+    @Override
+    public String addDeviceStatus(String status_name) {
+        JSONObject res = new JSONObject();
+        String answ = "insert into moh_device_status (status_name, created_by, created_at, uuid) " +
+                " values ('" + status_name + "','" + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(answ).executeUpdate();
+        if (rowsAffected >= 1) {
+            res.put("status","success");
+            res.put("statusCode",200);
+            res.put("message","Success");
+        }else{
+            res.put("status","failed");
+            res.put("statusCode",500);
+            res.put("message","Problem on insert Data");
+        }
+        return res.toString();
+    }
+
+    @Override
+    public String updateDeviceStatus(String status_name, String uuid) {
+        String res;
+        String ans = "update moh_device_status set status_name = '"+status_name+"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public List getDeviceStatus() {
+        String hql;
+        hql ="select status_name as 'Name', created_by as Creator, created_at as 'CreateDate', uuid as 'uuid'  " +
+                "from moh_device_status";
+
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
 
 }
