@@ -107,7 +107,7 @@ public class MyQuizController extends BaseRestController {
     }
 
     //list all available status
-    @RequestMapping(value="/get_device _status", method = RequestMethod.GET)
+    @RequestMapping(value="/get_device_status", method = RequestMethod.GET)
     @ResponseBody
     public String getDeviceStatus()
     {
