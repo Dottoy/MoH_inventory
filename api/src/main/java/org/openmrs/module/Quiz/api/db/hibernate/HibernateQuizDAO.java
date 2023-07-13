@@ -441,6 +441,8 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+
+
     @Override
     public String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue) {
         JSONObject res = new JSONObject();
@@ -465,5 +467,54 @@ public class HibernateQuizDAO implements QuizDAO {
         return "fail";
     }
 
+    @Override
+    public List getInventoryList() {
+        String hql;
+        hql ="select moh_device_type.device_type_name AS device_category_name,  " +
+                " moh_device.device_name AS device_name, moh_device_status.status_name AS device_status, " +
+                " CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS created_by, " +
+                " moh_device_inventory.uuid AS uuid, moh_device_inventory.created_at AS  created_at, location.name AS location_name " +
+                " FROM moh_device_type, moh_device, moh_device_inventory, location, moh_device_status, users, person_name WHERE " +
+                " moh_device.device_type_id=moh_device_type.device_type_id " +
+                " AND moh_device.device_id=moh_device_inventory.device_id " +
+                " AND location.location_id=moh_device_inventory.current_location " +
+                " AND moh_device_inventory.device_status_id=moh_device_status.status_id " +
+                " AND moh_device_inventory.created_by=users.user_id AND users.person_id=person_name.person_id";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceInventoryDetails.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List getListInventoryAttributeAnswers(Integer inventory_id) {
+        String hql;
+        hql ="SELECT moh_additional_attributes_names.name AS attributeName, " +
+                "moh_device_inventory_attribute_answer.attribute_value AS attributeValue, " +
+                "moh_device_inventory_attribute_answer.uuid AS uuid, moh_device_inventory_attribute_answer.created_at AS createDate, " +
+                "CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS creator " +
+                "FROM  moh_device_inventory_attribute_answer, moh_additional_attributes_names, users, person_name WHERE " +
+                "moh_device_inventory_attribute_answer.created_by=users.user_id AND users.person_id=person_name.person_id AND " +
+                "moh_device_inventory_attribute_answer.attribute_name_id=moh_additional_attributes_names.attribute_id AND " +
+                "moh_device_inventory_attribute_answer.inventory_id="+inventory_id;
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(DeviceAnswers.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
 
 }

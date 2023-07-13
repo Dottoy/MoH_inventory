@@ -3,26 +3,26 @@ package org.openmrs.module.Quiz.model;
 import java.util.Date;
 
 public class DeviceAnswers {
-    private int AttributeName;
-    private String AttributeValue;
+    private String attributeName;
+    private String attributeValue;
     private String uuid;
-    private int Creator;
-    private Date CreateDate;
+    private String creator;
+    private Date createDate;
 
-    public int getAttributeName() {
-        return AttributeName;
+    public String getAttributeName() {
+        return attributeName;
     }
 
-    public void setAttribute_Name(int attributeName) {
-        AttributeName = attributeName;
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 
     public String getAttributeValue() {
-        return AttributeValue;
+        return attributeValue;
     }
 
-    public void setAttribute_Value(String attributeValue) {
-        AttributeValue = attributeValue;
+    public void setAttributeValue(String attributeValue) {
+        this.attributeValue = attributeValue;
     }
 
     public String getUuid() {
@@ -33,19 +33,19 @@ public class DeviceAnswers {
         this.uuid = uuid;
     }
 
-    public int getCreator() {
-        return Creator;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setCreator(int creator) {
-        Creator = creator;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public Date getCreateDate() {
-        return CreateDate;
+        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
-        CreateDate = createDate;
+        this.createDate = createDate;
     }
 }

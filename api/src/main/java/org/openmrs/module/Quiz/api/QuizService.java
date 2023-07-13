@@ -60,4 +60,8 @@ public interface QuizService extends OpenmrsService {
     String addInventory(String payload);
 
     String validateInventoryPayload(String PayLoad);
+
+    List listInventory();
+
+    List listInventoryAttributeAnswers(String inventoryUuid);
 }

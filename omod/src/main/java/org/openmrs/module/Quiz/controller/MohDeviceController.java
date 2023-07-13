@@ -78,4 +78,21 @@ public class MohDeviceController extends BaseRestController {
         QuizService quizService = Context.getService(QuizService.class);
         return quizService.addInventory(payload);
     }
+
+
+    @RequestMapping(value = "/list_inventory", method = RequestMethod.GET)
+    @ResponseBody
+    public List listInventory()
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.listInventory();
+    }
+
+    @RequestMapping(value = "/list_inventory_attribute_answers", method = RequestMethod.GET)
+    @ResponseBody
+    public List listInventoryAttributeAnswers(@RequestParam String inventory_uuid)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.listInventoryAttributeAnswers(inventory_uuid);
+    }
 }

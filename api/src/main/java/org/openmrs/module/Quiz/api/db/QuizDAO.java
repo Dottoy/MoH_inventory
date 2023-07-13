@@ -73,4 +73,8 @@ public interface QuizDAO {
     String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue);
 
     AttributeNames setAttributeNames(String attributeUuid);
+
+    List getInventoryList();
+
+    List getListInventoryAttributeAnswers(Integer inventory_id);
 }

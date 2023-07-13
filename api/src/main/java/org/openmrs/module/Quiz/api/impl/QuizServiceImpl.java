@@ -281,6 +281,8 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         JSONObject inventory = new JSONObject(payload);
         JSONObject statusObject = new JSONObject();
         String message = validateInventoryPayload(payload);
+        String messageStatus = "Failed";
+        int code=500;
        if(message.equals("correct")){
             JSONObject DeviceInventory = inventory.getJSONObject("device_inventory");
             MohDeviceDetails deviceDetails = quizDAO.setDeviceId(DeviceInventory.getString("deviceUuid"));
@@ -304,9 +306,11 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
                 }
             }
            message = "Success";
+           messageStatus="Success";
+           code = 200;
         }
-        statusObject.put("status", "failed");
-        statusObject.put("statusCode", 500);
+        statusObject.put("status", messageStatus);
+        statusObject.put("statusCode", code);
         statusObject.put("message",message);
         return statusObject.toString();
     }
@@ -340,6 +344,18 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             }
         }
         return message;
+    }
+
+    @Override
+    public List listInventory() {
+        return quizDAO.getInventoryList();
+    }
+
+    @Override
+    public List listInventoryAttributeAnswers(String inventoryUuid) {
+        MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(inventoryUuid);
+        Integer inventory_id = inventoryDetails.getInventory_id();
+        return quizDAO.getListInventoryAttributeAnswers(inventory_id);
     }
 
 }
