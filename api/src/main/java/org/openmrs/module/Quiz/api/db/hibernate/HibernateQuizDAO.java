@@ -19,11 +19,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
-import org.openmrs.module.Quiz.model.AttributeNames;
-import org.openmrs.module.Quiz.model.DeviceAnswers;
-import org.openmrs.module.Quiz.model.MohDeviceDetails;
-import org.openmrs.module.Quiz.model.MohDeviceType;
-import org.openmrs.module.Quiz.model.PersonalDetails;
+import org.openmrs.module.Quiz.model.*;
 
 
 import java.util.Iterator;
@@ -392,6 +388,81 @@ public class HibernateQuizDAO implements QuizDAO {
             }
         }
         return null;
+    }
+
+    @Override
+    public MohDeviceStatus setDeviceStatusId(String deviceStatusUuid) {
+        String hql_device = "select * from moh_device_status where uuid='" + deviceStatusUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(MohDeviceStatus.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (MohDeviceStatus) iterator.next();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public MohDeviceInventory setInventoryDetail(String uuid) {
+        String hql_device = "select * from moh_device_inventory where uuid='" + uuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(MohDeviceInventory.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (MohDeviceInventory) iterator.next();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public AttributeNames setAttributeNames(String attributeUuid) {
+        String hql_device = "select * from moh_additional_attributes_names where uuid='" + attributeUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (AttributeNames) iterator.next();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue) {
+        JSONObject res = new JSONObject();
+        String query_string = "insert into moh_device_inventory_attribute_answer (inventory_id, attribute_name_id, attribute_value, created_by, created_at, uuid) " +
+                " values (" + inventory_id + ","+ attribute_name_id +",'"+ attributeValue +"', " + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+        int rowsAffected = createSQLQuery(query_string).executeUpdate();
+        if (rowsAffected > 0) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @Override
+    public String addInventory(Integer device_id, Integer device_status_id, String name, Integer current_location, Integer created_by, String uuid_value) {
+        JSONObject res = new JSONObject();
+        String query_string = "insert into moh_device_inventory (device_id,device_status_id,name,current_location, created_by, created_at, uuid) " +
+                " values (" + device_id + ","+ device_status_id +",'"+ name +"',"+ current_location +"," + Context.getAuthenticatedUser().getUserId() + "', current_date(), '"+ uuid_value +"')";
+        int rowsAffected = createSQLQuery(query_string).executeUpdate();
+        if (rowsAffected > 0) {
+            return "success";
+        }
+        return "fail";
     }
 
 

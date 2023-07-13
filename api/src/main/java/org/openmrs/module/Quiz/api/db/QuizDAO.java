@@ -11,6 +11,8 @@ package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
 import org.openmrs.module.Quiz.model.AttributeNames;
 import org.openmrs.module.Quiz.model.MohDeviceDetails;
+import org.openmrs.module.Quiz.model.MohDeviceInventory;
+import org.openmrs.module.Quiz.model.MohDeviceStatus;
 
 import java.util.List;
 
@@ -60,4 +62,15 @@ public interface QuizDAO {
     String addDeviceInventoryAnswer(int attribute_name_id, String attribute_value);
 
     List getDeviceInventoryAnswers();
+
+
+    MohDeviceStatus setDeviceStatusId(String deviceStatusUuid);
+
+    String addInventory(Integer device_id, Integer device_status_id, String name, Integer current_location, Integer created_by, String uuid_value);
+
+    MohDeviceInventory setInventoryDetail(String uuid);
+
+    String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue);
+
+    AttributeNames setAttributeNames(String attributeUuid);
 }

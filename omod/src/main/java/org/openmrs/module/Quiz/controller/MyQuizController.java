@@ -3,6 +3,8 @@ package org.openmrs.module.Quiz.controller;
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Location;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Quiz.api.QuizService;
 import org.openmrs.module.webservices.rest.web.RestConstants;
@@ -149,5 +151,14 @@ public class MyQuizController extends BaseRestController {
         }
         return response;
     }
+    @RequestMapping(value = "/all_location", method = RequestMethod.GET)
+    @ResponseBody
+    public String getAllLocation()
+    {
+        LocationService location=Context.getLocationService();
+       String response = new  Gson().toJson(location.getAllLocations());
+       return response;
+    }
+
 }
 
