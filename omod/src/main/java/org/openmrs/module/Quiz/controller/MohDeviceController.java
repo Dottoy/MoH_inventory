@@ -26,7 +26,7 @@ public class MohDeviceController extends BaseRestController {
         return deviceService.addDevice(detailPayload);
     }
 
-    @RequestMapping(value = "/update_device", method = RequestMethod.POST)
+    @RequestMapping(value = "/update_device", method = RequestMethod.PUT)
     @ResponseBody
     public String updateDevice(@RequestBody String detailPayload) {
         QuizService deviceService = Context.getService(QuizService.class);
@@ -67,6 +67,7 @@ public class MohDeviceController extends BaseRestController {
             List empty = new ArrayList();
             response = new Gson().toJson(empty);
         }
+
         return response;
     }
 
