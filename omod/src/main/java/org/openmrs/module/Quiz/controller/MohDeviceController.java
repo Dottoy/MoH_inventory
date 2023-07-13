@@ -76,7 +76,6 @@ public class MohDeviceController extends BaseRestController {
     public String addInventory(@RequestBody String payload)
     {
         QuizService quizService = Context.getService(QuizService.class);
-       String result =  quizService.addInventory(payload);
-        return  result;
+        return quizService.addInventory(payload);
     }
 }

@@ -282,20 +282,20 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         JSONObject statusObject = new JSONObject();
         String message = validateInventoryPayload(payload);
        if(message.equals("correct")){
-            JSONObject DeviceInventory = new JSONObject(inventory.getString("device_inventory"));
+            JSONObject DeviceInventory = inventory.getJSONObject("device_inventory");
             MohDeviceDetails deviceDetails = quizDAO.setDeviceId(DeviceInventory.getString("deviceUuid"));
+
             MohDeviceStatus deviceStatus = quizDAO.setDeviceStatusId(DeviceInventory.getString("deviceStatusUuid"));
             Integer device_id = deviceDetails.getDeviceId();
             Integer device_status_id = deviceStatus.getStatus_id();
-            String name = DeviceInventory.getString("name");
             Integer current_location = Context.getLocationService().getDefaultLocation().getLocationId();
             Integer created_by = Context.getAuthenticatedUser().getUserId();
             String uuid_value = UUID.randomUUID().toString();
-            String response = quizDAO.addInventory(device_id,device_status_id,name,current_location,created_by, uuid_value);
+            String response = quizDAO.addInventory(device_id,device_status_id, current_location, created_by, uuid_value);
             if(response.equals("success")) {
                 MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(uuid_value);
                 Integer inventory_id = inventoryDetails.getInventory_id();
-                JSONArray attributesAnswerArray = DeviceInventory.getJSONArray("attribute_answer");
+                JSONArray attributesAnswerArray = inventory.getJSONArray("attribute_answer");
                 for (Object a : attributesAnswerArray) {
                     JSONObject answersArray = (JSONObject) a;
                     AttributeNames attributeNames = quizDAO.setAttributeNames(answersArray.getString("attributeUuid"));
@@ -320,9 +320,8 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             JSONArray attributesAnswerArray = inventory.getJSONArray("attribute_answer");
             JSONObject device_inventory = inventory.getJSONObject("device_inventory");
             if(!device_inventory.has("deviceUuid")
-                    ||!device_inventory.has("name")
-                    || !device_inventory.has("deviceStatusUUid")){
-                message = "device_uuid, name, deviceStatusUUid must be provided";
+                    || !device_inventory.has("deviceStatusUuid")){
+                message = "device_uuid, deviceStatusUUid must be provided";
             }
 
             if (attributesAnswerArray.length() > 0) {

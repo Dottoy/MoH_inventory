@@ -426,7 +426,7 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public AttributeNames setAttributeNames(String attributeUuid) {
-        String hql_device = "select * from moh_additional_attributes_names where uuid='" + attributeUuid + "'";
+        String hql_device = "select attribute_id AS attributeId from moh_additional_attributes_names where uuid='" + attributeUuid + "'";
         DbSession session=sessionFactory.getCurrentSession();
         Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
         List results=query.list();
@@ -445,7 +445,7 @@ public class HibernateQuizDAO implements QuizDAO {
     public String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue) {
         JSONObject res = new JSONObject();
         String query_string = "insert into moh_device_inventory_attribute_answer (inventory_id, attribute_name_id, attribute_value, created_by, created_at, uuid) " +
-                " values (" + inventory_id + ","+ attribute_name_id +",'"+ attributeValue +"', " + Context.getAuthenticatedUser().getUserId() + "', current_date(), uuid())";
+                " values (" + inventory_id + ","+ attribute_name_id +",'"+ attributeValue +"', " + Context.getAuthenticatedUser().getUserId() + ", current_date(), uuid())";
         int rowsAffected = createSQLQuery(query_string).executeUpdate();
         if (rowsAffected > 0) {
             return "success";
@@ -454,10 +454,10 @@ public class HibernateQuizDAO implements QuizDAO {
     }
 
     @Override
-    public String addInventory(Integer device_id, Integer device_status_id, String name, Integer current_location, Integer created_by, String uuid_value) {
+    public String addInventory(Integer device_id, Integer device_status_id,  Integer current_location, Integer created_by, String uuid_value) {
         JSONObject res = new JSONObject();
-        String query_string = "insert into moh_device_inventory (device_id,device_status_id,name,current_location, created_by, created_at, uuid) " +
-                " values (" + device_id + ","+ device_status_id +",'"+ name +"',"+ current_location +"," + Context.getAuthenticatedUser().getUserId() + "', current_date(), '"+ uuid_value +"')";
+        String query_string = "insert into moh_device_inventory (device_id,device_status_id,current_location, created_by, created_at, uuid) " +
+                " values (" + device_id + ","+ device_status_id +", "+ current_location +"," + Context.getAuthenticatedUser().getUserId() + ", current_date(), '"+ uuid_value +"')";
         int rowsAffected = createSQLQuery(query_string).executeUpdate();
         if (rowsAffected > 0) {
             return "success";

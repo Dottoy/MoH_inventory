@@ -6,8 +6,17 @@ public class MohDeviceInventory {
     private int inventory_id;
     private int device_id;
     private int device_status_id;
-    private String name;
-    private int created_by;
+   private int created_by;
+
+    public int getCurrent_location() {
+        return current_location;
+    }
+
+    public void setCurrent_location(int current_location) {
+        this.current_location = current_location;
+    }
+
+    private int current_location;
     private Date created_at;
     private String uuid;
 
@@ -33,14 +42,6 @@ public class MohDeviceInventory {
 
     public void setDevice_status_id(int device_status_id) {
         this.device_status_id = device_status_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getCreated_by() {

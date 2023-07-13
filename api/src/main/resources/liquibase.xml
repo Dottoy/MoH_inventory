@@ -154,16 +154,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="MAFURU" id="remove_attribute_name_id">
-        <dropColumn
-                tableName="moh_device_inventory"
-                columnName="attribute_name_id"
-        />
-        <dropColumn
-                tableName="moh_device_inventory"
-                columnName="attribute_value"
-        />
-    </changeSet>
 
     <changeSet id="moh_device_inventory_attribute_answer" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
@@ -194,40 +184,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="mafuru" id="add_pk_moh_device_inventory_attribute_answer">
-        <addPrimaryKey
-                columnNames="inventory_id"
-                constraintName="pk_constraint_inventory_id"
-                tableName="moh_device_inventory_attribute_answer"
-        />
-    </changeSet>
-    <changeSet author="MAFURU" id="alter_attribute_value">
-        <modifyDataType
-                columnName="attribute_value"
-                newDataType="varchar(255)"
-                tableName="moh_device_inventory_attribute_answer"
-        />
-    </changeSet>
-    <changeSet author="MAFURU" id="alter2_attribute_value">
-        <dropPrimaryKey
-                tableName="moh_device_inventory_attribute_answer"
-                constraintName="pk_constraint_inventory_id"
-        />
-    </changeSet>
-    <changeSet author="mafuru" id="add2_pk_moh_device_inventory_attribute_answer">
-        <addColumn tableName="moh_device_inventory_attribute_answer">
-            <column name="answer_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
 
-    <changeSet author="MAFURU" id="alter3_attribute_value">
-        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
-                                 baseTableName="moh_device_inventory_attribute_answer" baseColumnNames="inventory_id"
-                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
-                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
-    </changeSet>
 
     <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
@@ -458,6 +415,67 @@
                                  referencedTableName="users" referencedColumnNames="user_id" onDelete="RESTRICT"
                                  onUpdate="CASCADE"/>
 
+    </changeSet>
+
+    <changeSet author="MAFURU" id="remove_attribute_name_id">
+        <dropForeignKeyConstraint
+                baseTableName="moh_device_inventory"
+                constraintName="fk_moh_device_inventory_attributes_name_id"
+        />
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="attribute_name_id"
+        />
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="attribute_value"
+        />
+    </changeSet>
+    <changeSet author="mafuru" id="add_pk_moh_device_inventory_attribute_answer">
+        <addPrimaryKey
+                columnNames="inventory_id"
+                constraintName="pk_constraint_inventory_id"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+    <changeSet author="MAFURU" id="alter_attribute_value">
+        <modifyDataType
+                columnName="attribute_value"
+                newDataType="varchar(255)"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+
+    <changeSet author="MAFURU" id="alter2_attribute_value">
+        <dropForeignKeyConstraint
+                baseTableName="moh_device_inventory_attribute_answer"
+                constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
+        />
+        <dropPrimaryKey
+                tableName="moh_device_inventory_attribute_answer"
+                constraintName="pk_constraint_inventory_id"
+        />
+    </changeSet>
+    <changeSet author="mafuru" id="add2_pk_moh_device_inventory_attribute_answer">
+        <addColumn tableName="moh_device_inventory_attribute_answer">
+            <column name="answer_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="MAFURU" id="alter3_attribute_value">
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
+                                 baseTableName="moh_device_inventory_attribute_answer" baseColumnNames="inventory_id"
+                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet author="BOSCO" id="drop_name_column_in_moh_device_inventory">
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="name"
+        />
     </changeSet>
 
 </databaseChangeLog>

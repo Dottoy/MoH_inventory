@@ -66,7 +66,7 @@ public interface QuizDAO {
 
     MohDeviceStatus setDeviceStatusId(String deviceStatusUuid);
 
-    String addInventory(Integer device_id, Integer device_status_id, String name, Integer current_location, Integer created_by, String uuid_value);
+    String addInventory(Integer device_id, Integer device_status_id, Integer current_location, Integer created_by, String uuid_value);
 
     MohDeviceInventory setInventoryDetail(String uuid);
 
