@@ -45,6 +45,23 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         return quizDAO.addDeviceType(itemObject.getString("type_name"));
     }
 
+    public String addDeviceMovementObject(String deviceMovementBody){
+        JSONObject deviceObject = new JSONObject(deviceMovementBody);
+        if (deviceObject.has("dev_uuid") && deviceObject.has("receiver_uuid") && deviceObject.has("sender_uuid") && deviceObject.has("location_uuid")){
+            if (deviceObject.getString("dev_uuid").equalsIgnoreCase("") || deviceObject.getString("receiver_uuid").equalsIgnoreCase("") || deviceObject.getString("sender_uuid").equalsIgnoreCase("") || deviceObject.getString("location_uuid").equalsIgnoreCase("")){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Review you data, some details are missing to process this request!");
+                return jsonObject.toString();
+            }else{
+                return quizDAO.addDeviceMovementObject(deviceObject.getString("dev_uuid"),deviceObject.getString("receiver_uuid"),deviceObject.getString("sender_uuid"),deviceObject.getString("location_uuid"));
+            }
+        }else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message","All fields are required");
+            return jsonObject.toString();
+        }
+    }
+
     @Override
     public String updateDeviceTypeObject(String deviceTypeBody) {
         JSONObject itemObject = new JSONObject(deviceTypeBody);

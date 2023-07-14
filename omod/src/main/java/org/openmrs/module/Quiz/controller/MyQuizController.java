@@ -30,6 +30,13 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceTypeObject(deviceTypeBody);
     }
 
+    @RequestMapping(value ="/add/device/movement", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceMovementObject(@RequestBody String deviceMovementBody){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceMovementObject(deviceMovementBody);
+    }
+
     @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){

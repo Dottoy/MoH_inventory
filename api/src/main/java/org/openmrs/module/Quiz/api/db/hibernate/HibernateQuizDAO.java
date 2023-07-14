@@ -89,6 +89,11 @@ public class HibernateQuizDAO implements QuizDAO {
         return statusObject.toString();
     }
 
+    @Override
+    public String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid) {
+        String query1 = "select * from moh_device where uuid = '"+dev_uuid+"' LIMIT 1 ";
+        return "data is working";
+    }
 
 
     public String updateDeviceTypeObject(String typeName, String type_id) {
