@@ -77,4 +77,6 @@ public interface QuizDAO {
     List getInventoryList();
 
     List getListInventoryAttributeAnswers(Integer inventory_id);
+
+    String updateInventory(int device_id, int device_status_id, String uuid);
 }

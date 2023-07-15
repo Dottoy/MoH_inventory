@@ -517,4 +517,21 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+    @Override
+    public String updateInventory(int device_id, int device_status_id, String uuid) {
+        String res;
+        String ans = "update moh_device_inventory set device_id = "+device_id+",device_status_id = "+ device_status_id +" where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
+
 }
