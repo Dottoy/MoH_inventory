@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="quiz-api" />
         <module name="quiz-omod" />
+        <module name="quiz-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

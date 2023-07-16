@@ -28,6 +28,7 @@ public interface QuizService extends OpenmrsService {
 
     String updateDeviceTypeObject(String deviceTypeBody);
 
+    String verifyUserNidNumber(String nidaNumber);
 
     //function for moh test end here
 
@@ -58,4 +59,12 @@ public interface QuizService extends OpenmrsService {
     List getDeviceInventoryAnswers();
 
     List deviceTypeList();
+
+    String addInventory(String payload);
+
+    String validateInventoryPayload(String PayLoad);
+
+    List listInventory();
+
+    List listInventoryAttributeAnswers(String inventoryUuid);
 }

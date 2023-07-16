@@ -3,13 +3,15 @@ package org.openmrs.module.Quiz.controller;
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Location;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Quiz.api.QuizService;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,12 @@ public class MyQuizController extends BaseRestController {
 
     //moh inventory functions start here
 
+    @RequestMapping(value ="/verify/nida/number", method = RequestMethod.POST)
+    @ResponseBody
+    public String verifyNiN(@RequestBody String nidaNumber){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.verifyUserNidNumber(nidaNumber);
+    }
 
     @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
     @ResponseBody
@@ -37,7 +45,8 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceMovementObject(deviceMovementBody);
     }
 
-    @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
+//    @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
+    @RequestMapping(value ="/update/device/type", method = RequestMethod.PUT)
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){
         QuizService quizService = Context.getService(QuizService.class);
@@ -69,7 +78,7 @@ public class MyQuizController extends BaseRestController {
 
     //for update attribute names
 
-    @RequestMapping(value="/update_attribute_name",  method = RequestMethod.POST)
+    @RequestMapping(value="/update_attribute_name",  method = RequestMethod.PUT)
     @ResponseBody
     public String updateAttributeName(@RequestBody String name)
     {
@@ -105,7 +114,7 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceStatus(status);
     }
     //update device status
-    @RequestMapping(value="/update_device_status",  method = RequestMethod.POST)
+    @RequestMapping(value="/update_device_status",  method = RequestMethod.PUT)
     @ResponseBody
     public String updateDeviceStatus(@RequestBody String status)
     {
@@ -114,7 +123,7 @@ public class MyQuizController extends BaseRestController {
     }
 
     //list all available status
-    @RequestMapping(value="/get_device _status", method = RequestMethod.GET)
+    @RequestMapping(value="/get_device_status", method = RequestMethod.GET)
     @ResponseBody
     public String getDeviceStatus()
     {
@@ -156,5 +165,14 @@ public class MyQuizController extends BaseRestController {
         }
         return response;
     }
+    @RequestMapping(value = "/all_location", method = RequestMethod.GET)
+    @ResponseBody
+    public String getAllLocation()
+    {
+        LocationService location=Context.getLocationService();
+       String response = new  Gson().toJson(location.getAllLocations());
+       return response;
+    }
+
 }
 

@@ -5,6 +5,46 @@
      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
     <!-- See https://www.liquibase.org/manual/home#available_database_refactorings for a list of supported elements and attributes-->
     <!-- Adding a global property -->
+    <changeSet id="nida_verification" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="nida_table"/>
+            </not>
+        </preConditions>
+        <comment>table to store device status</comment>
+        <createTable tableName="nida_table">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nin_no" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="firstname" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="middlename" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="lastname" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="gender" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="dob" type="date">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="nationality" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
 
     <changeSet id="moh_device_type" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
@@ -154,6 +194,7 @@
         </createTable>
     </changeSet>
 
+
     <changeSet id="moh_device_inventory_attribute_answer" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -183,20 +224,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="mafuru" id="add_pk_moh_device_inventory_attribute_answer">
-        <addPrimaryKey
-                columnNames="inventory_id"
-                constraintName="pk_constraint_inventory_id"
-                tableName="moh_device_inventory_attribute_answer"
-        />
-    </changeSet>
-    <changeSet author="MAFURU" id="alter_attribute_value">
-        <modifyDataType
-                columnName="attribute_value"
-                newDataType="varchar(255)"
-                tableName="moh_device_inventory_attribute_answer"
-        />
-    </changeSet>
+
 
     <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
@@ -428,5 +456,68 @@
                                  onUpdate="CASCADE"/>
 
     </changeSet>
+
+    <changeSet author="MAFURU" id="remove_attribute_name_id">
+        <dropForeignKeyConstraint
+                baseTableName="moh_device_inventory"
+                constraintName="fk_moh_device_inventory_attributes_name_id"
+        />
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="attribute_name_id"
+        />
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="attribute_value"
+        />
+    </changeSet>
+    <changeSet author="mafuru" id="add_pk_moh_device_inventory_attribute_answer">
+        <addPrimaryKey
+                columnNames="inventory_id"
+                constraintName="pk_constraint_inventory_id"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+    <changeSet author="MAFURU" id="alter_attribute_value">
+        <modifyDataType
+                columnName="attribute_value"
+                newDataType="varchar(255)"
+                tableName="moh_device_inventory_attribute_answer"
+        />
+    </changeSet>
+
+    <changeSet author="MAFURU" id="alter2_attribute_value">
+        <dropForeignKeyConstraint
+                baseTableName="moh_device_inventory_attribute_answer"
+                constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
+        />
+        <dropPrimaryKey
+                tableName="moh_device_inventory_attribute_answer"
+                constraintName="pk_constraint_inventory_id"
+        />
+    </changeSet>
+    <changeSet author="mafuru" id="add2_pk_moh_device_inventory_attribute_answer">
+        <addColumn tableName="moh_device_inventory_attribute_answer">
+            <column name="answer_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="MAFURU" id="alter3_attribute_value">
+        <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_inventory_id"
+                                 baseTableName="moh_device_inventory_attribute_answer" baseColumnNames="inventory_id"
+                                 referencedTableName="moh_device_inventory" referencedColumnNames="inventory_id"
+                                 onDelete="RESTRICT" onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet author="BOSCO" id="drop_name_column_in_moh_device_inventory">
+        <dropColumn
+                tableName="moh_device_inventory"
+                columnName="name"
+        />
+    </changeSet>
+
+
 
 </databaseChangeLog>

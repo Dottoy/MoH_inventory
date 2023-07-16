@@ -15,15 +15,12 @@ import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.json.JSONObject;
+import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
-import org.openmrs.module.Quiz.model.AttributeNames;
-import org.openmrs.module.Quiz.model.DeviceAnswers;
-import org.openmrs.module.Quiz.model.MohDeviceDetails;
-import org.openmrs.module.Quiz.model.MohDeviceType;
-import org.openmrs.module.Quiz.model.PersonalDetails;
+import org.openmrs.module.Quiz.model.*;
 
 
 import java.util.Iterator;
@@ -92,7 +89,12 @@ public class HibernateQuizDAO implements QuizDAO {
     @Override
     public String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid) {
         String query1 = "select * from moh_device where uuid = '"+dev_uuid+"' LIMIT 1 ";
-        return "data is working";
+        User username  = Context.getUserService().getUserByUuid(receiver_uuid);
+        Integer id = username.getId();
+
+        JSONObject jsonObject = new JSONObject();
+        return jsonObject.put("useID", id).toString();
+
     }
 
 
@@ -108,6 +110,37 @@ public class HibernateQuizDAO implements QuizDAO {
 
     }
 
+    @Override
+    public String saveUserNiNDetails(String nin, String firstName, String lastName, String dateOfBirth, String sex, String nationality) {
+        //this line is for creating connection
+
+        //check if nin number already registered
+        String query = "select * from nida_table where nin_no ='"+nin+"' ";
+        DbSession session   =  sessionFactory.getCurrentSession();
+        Query query2        =  session.createSQLQuery(query);
+        List info=query2.list();
+        if (info.size() == 0){
+
+            //new nin number register it!
+            String hql = "insert into nida_table (nin_no,firstname,middlename,lastname,gender,dob,nationality,created_at,uuid)" +
+                    " VALUES ('"+nin+"','"+firstName+"','"+firstName+"','"+lastName+"','"+sex+"','"+dateOfBirth+"','"+nationality+"', now(), uuid() )";
+            int rowsAffected = createSQLQuery(hql).executeUpdate();
+
+            if (rowsAffected >= 1){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Your request completed successfully, Detail saved.");
+                return jsonObject.toString();
+            }else{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Something went wrong, fail to process your request!");
+                return jsonObject.toString();
+            }
+        }else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message","Your nida information already saved! Thank you.");
+            return jsonObject.toString();
+        }
+    }
 
 
     //moh test query end here
@@ -399,5 +432,131 @@ public class HibernateQuizDAO implements QuizDAO {
         return null;
     }
 
+    @Override
+    public MohDeviceStatus setDeviceStatusId(String deviceStatusUuid) {
+        String hql_device = "select * from moh_device_status where uuid='" + deviceStatusUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(MohDeviceStatus.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (MohDeviceStatus) iterator.next();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public MohDeviceInventory setInventoryDetail(String uuid) {
+        String hql_device = "select * from moh_device_inventory where uuid='" + uuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(MohDeviceInventory.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (MohDeviceInventory) iterator.next();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public AttributeNames setAttributeNames(String attributeUuid) {
+        String hql_device = "select attribute_id AS attributeId from moh_additional_attributes_names where uuid='" + attributeUuid + "'";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(AttributeNames.class));
+        List results=query.list();
+        if(results!=null)
+        {
+            if(results.size()>0)
+            {
+                Iterator iterator=results.iterator();
+                return (AttributeNames) iterator.next();
+            }
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public String addAttributeValue(Integer inventory_id, int attribute_name_id, String attributeValue) {
+        JSONObject res = new JSONObject();
+        String query_string = "insert into moh_device_inventory_attribute_answer (inventory_id, attribute_name_id, attribute_value, created_by, created_at, uuid) " +
+                " values (" + inventory_id + ","+ attribute_name_id +",'"+ attributeValue +"', " + Context.getAuthenticatedUser().getUserId() + ", current_date(), uuid())";
+        int rowsAffected = createSQLQuery(query_string).executeUpdate();
+        if (rowsAffected > 0) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @Override
+    public String addInventory(Integer device_id, Integer device_status_id,  Integer current_location, Integer created_by, String uuid_value) {
+        JSONObject res = new JSONObject();
+        String query_string = "insert into moh_device_inventory (device_id,device_status_id,current_location, created_by, created_at, uuid) " +
+                " values (" + device_id + ","+ device_status_id +", "+ current_location +"," + Context.getAuthenticatedUser().getUserId() + ", current_date(), '"+ uuid_value +"')";
+        int rowsAffected = createSQLQuery(query_string).executeUpdate();
+        if (rowsAffected > 0) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @Override
+    public List getInventoryList() {
+        String hql;
+        hql ="select moh_device_type.device_type_name AS device_category_name,  " +
+                " moh_device.device_name AS device_name, moh_device_status.status_name AS device_status, " +
+                " CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS created_by, " +
+                " moh_device_inventory.uuid AS uuid, moh_device_inventory.created_at AS  created_at, location.name AS location_name " +
+                " FROM moh_device_type, moh_device, moh_device_inventory, location, moh_device_status, users, person_name WHERE " +
+                " moh_device.device_type_id=moh_device_type.device_type_id " +
+                " AND moh_device.device_id=moh_device_inventory.device_id " +
+                " AND location.location_id=moh_device_inventory.current_location " +
+                " AND moh_device_inventory.device_status_id=moh_device_status.status_id " +
+                " AND moh_device_inventory.created_by=users.user_id AND users.person_id=person_name.person_id";
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(MohDeviceInventoryDetails.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List getListInventoryAttributeAnswers(Integer inventory_id) {
+        String hql;
+        hql ="SELECT moh_additional_attributes_names.name AS attributeName, " +
+                "moh_device_inventory_attribute_answer.attribute_value AS attributeValue, " +
+                "moh_device_inventory_attribute_answer.uuid AS uuid, moh_device_inventory_attribute_answer.created_at AS createDate, " +
+                "CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS creator " +
+                "FROM  moh_device_inventory_attribute_answer, moh_additional_attributes_names, users, person_name WHERE " +
+                "moh_device_inventory_attribute_answer.created_by=users.user_id AND users.person_id=person_name.person_id AND " +
+                "moh_device_inventory_attribute_answer.attribute_name_id=moh_additional_attributes_names.attribute_id AND " +
+                "moh_device_inventory_attribute_answer.inventory_id="+inventory_id;
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(DeviceAnswers.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
 
 }
