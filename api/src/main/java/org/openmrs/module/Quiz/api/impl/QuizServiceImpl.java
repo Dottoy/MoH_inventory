@@ -390,10 +390,9 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         String messageStatus = "Failed";
         int code=500;
        if(message.equals("correct")){
-            JSONObject DeviceInventory = inventory.getJSONObject("device_inventory");
-            MohDeviceDetails deviceDetails = quizDAO.setDeviceId(DeviceInventory.getString("deviceUuid"));
+            MohDeviceDetails deviceDetails = quizDAO.setDeviceId(inventory.getString("deviceUuid"));
 
-            MohDeviceStatus deviceStatus = quizDAO.setDeviceStatusId(DeviceInventory.getString("deviceStatusUuid"));
+            MohDeviceStatus deviceStatus = quizDAO.setDeviceStatusId(inventory.getString("deviceStatusUuid"));
             Integer device_id = deviceDetails.getDeviceId();
             Integer device_status_id = deviceStatus.getStatus_id();
             Integer current_location = Context.getLocationService().getDefaultLocation().getLocationId();
@@ -424,13 +423,12 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     public String validateInventoryPayload(String PayLoad) {
         JSONObject inventory = new JSONObject(PayLoad);
         String message = "correct";
-        if (!inventory.has("device_inventory") || !inventory.has("attribute_answer")) {
+        if (!inventory.has("attribute_answer")) {
             message = "Incorrect Object Provided";
         } else {
             JSONArray attributesAnswerArray = inventory.getJSONArray("attribute_answer");
-            JSONObject device_inventory = inventory.getJSONObject("device_inventory");
-            if(!device_inventory.has("deviceUuid")
-                    || !device_inventory.has("deviceStatusUuid")){
+            if(!inventory.has("deviceUuid")
+                    || !inventory.has("deviceStatusUuid")){
                 message = "device_uuid, deviceStatusUUid must be provided";
             }
 
