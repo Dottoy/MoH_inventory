@@ -5,6 +5,46 @@
      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
     <!-- See https://www.liquibase.org/manual/home#available_database_refactorings for a list of supported elements and attributes-->
     <!-- Adding a global property -->
+    <changeSet id="nida_verification" author="Mulisa" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="nida_table"/>
+            </not>
+        </preConditions>
+        <comment>table to store device status</comment>
+        <createTable tableName="nida_table">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nin_no" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="firstname" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="middlename" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="lastname" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="gender" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="dob" type="date">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="nationality" type="varchar(255)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
 
     <changeSet id="moh_device_type" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
@@ -477,5 +517,7 @@
                 columnName="name"
         />
     </changeSet>
+
+
 
 </databaseChangeLog>

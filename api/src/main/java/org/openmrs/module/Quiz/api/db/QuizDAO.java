@@ -25,9 +25,11 @@ public interface QuizDAO {
      //moh functions start here
      String addDeviceType(String type_name);
 
+     String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid);
+
      String updateDeviceTypeObject(String typeName, String type_id);
 
-
+    String saveUserNiNDetails(String nin,String firstName,String lastName,String dateOfBirth,String sex, String nationality);
      //moh functions end here
 
      String addItem(String ItemName, String Description);

@@ -15,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.json.JSONObject;
+import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
@@ -85,6 +86,16 @@ public class HibernateQuizDAO implements QuizDAO {
         return statusObject.toString();
     }
 
+    @Override
+    public String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid) {
+        String query1 = "select * from moh_device where uuid = '"+dev_uuid+"' LIMIT 1 ";
+        User username  = Context.getUserService().getUserByUuid(receiver_uuid);
+        Integer id = username.getId();
+
+        JSONObject jsonObject = new JSONObject();
+        return jsonObject.put("useID", id).toString();
+
+    }
 
 
     public String updateDeviceTypeObject(String typeName, String type_id) {
@@ -99,6 +110,37 @@ public class HibernateQuizDAO implements QuizDAO {
 
     }
 
+    @Override
+    public String saveUserNiNDetails(String nin, String firstName, String lastName, String dateOfBirth, String sex, String nationality) {
+        //this line is for creating connection
+
+        //check if nin number already registered
+        String query = "select * from nida_table where nin_no ='"+nin+"' ";
+        DbSession session   =  sessionFactory.getCurrentSession();
+        Query query2        =  session.createSQLQuery(query);
+        List info=query2.list();
+        if (info.size() == 0){
+
+            //new nin number register it!
+            String hql = "insert into nida_table (nin_no,firstname,middlename,lastname,gender,dob,nationality,created_at,uuid)" +
+                    " VALUES ('"+nin+"','"+firstName+"','"+firstName+"','"+lastName+"','"+sex+"','"+dateOfBirth+"','"+nationality+"', now(), uuid() )";
+            int rowsAffected = createSQLQuery(hql).executeUpdate();
+
+            if (rowsAffected >= 1){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Your request completed successfully, Detail saved.");
+                return jsonObject.toString();
+            }else{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Something went wrong, fail to process your request!");
+                return jsonObject.toString();
+            }
+        }else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message","Your nida information already saved! Thank you.");
+            return jsonObject.toString();
+        }
+    }
 
 
     //moh test query end here

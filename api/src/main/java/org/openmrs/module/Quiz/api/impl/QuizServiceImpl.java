@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.Quiz.api.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openmrs.Location;
@@ -22,10 +24,16 @@ import org.openmrs.module.Quiz.model.MohDeviceInventory;
 import org.openmrs.module.Quiz.model.MohDeviceStatus;
 import org.openmrs.module.Quiz.util.DateUtil;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.DataOutputStream;
 
 import java.util.List;
 import java.util.UUID;
-
+import com.google.gson.Gson;
 /**
  * Implementation of {@link QuizService}.
  */
@@ -50,6 +58,23 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         return quizDAO.addDeviceType(itemObject.getString("type_name"));
     }
 
+    public String addDeviceMovementObject(String deviceMovementBody){
+        JSONObject deviceObject = new JSONObject(deviceMovementBody);
+        if (deviceObject.has("dev_uuid") && deviceObject.has("receiver_uuid") && deviceObject.has("sender_uuid") && deviceObject.has("location_uuid")){
+            if (deviceObject.getString("dev_uuid").equalsIgnoreCase("") || deviceObject.getString("receiver_uuid").equalsIgnoreCase("") || deviceObject.getString("sender_uuid").equalsIgnoreCase("") || deviceObject.getString("location_uuid").equalsIgnoreCase("")){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Review you data, some details are missing to process this request!");
+                return jsonObject.toString();
+            }else{
+                return quizDAO.addDeviceMovementObject(deviceObject.getString("dev_uuid"),deviceObject.getString("receiver_uuid"),deviceObject.getString("sender_uuid"),deviceObject.getString("location_uuid"));
+            }
+        }else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message","All fields are required");
+            return jsonObject.toString();
+        }
+    }
+
     @Override
     public String updateDeviceTypeObject(String deviceTypeBody) {
         JSONObject itemObject = new JSONObject(deviceTypeBody);
@@ -72,6 +97,88 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         }
     }
 
+    @Override
+    public String verifyUserNidNumber(String nidaNumber) {
+        JSONObject nidaObject = new JSONObject(nidaNumber);
+        if (!nidaObject.getString("nida_number").equalsIgnoreCase("")){
+            String myNida = nidaObject.getString("nida_number");
+            try{
+                // Create URL object with the target URL
+                URL url = new URL("https://ors.brela.go.tz/um/load/load_nida/"+myNida);
+
+                // Create HttpURLConnection object
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                // Set request method (GET, POST, PUT, DELETE, etc.)
+                connection.setRequestMethod("POST");
+
+                // Optional: Set request headers
+                connection.setRequestProperty("Content-Type", "application/json");
+//                connection.setRequestProperty("Authorization", "Bearer <your_token>");
+
+                // Request body
+                String requestBody = "{\"key\":\"value\"}";
+
+                // Set the Content-Length header
+                connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length()));
+
+                // Enable output and write the request body
+                connection.setDoOutput(true);
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(requestBody);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+//                System.out.println("Response Code: " + responseCode);
+
+                // Read the response
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                // Close the connection
+                connection.disconnect();
+                String requestResponse = response.toString();
+
+                // Parse the JSON string into a JsonObject
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(requestResponse, JsonObject.class);
+
+
+                // Access the nested data
+                JsonObject resultObject = jsonObject.getAsJsonObject("obj").getAsJsonObject("result");
+                if (jsonObject.has("obj") && jsonObject.get("obj").getAsJsonObject().has("result")){
+                    String nin          = resultObject.get("NIN").getAsString();
+                    String firstName    = resultObject.get("FIRSTNAME").getAsString();
+                    String lastName     = resultObject.get("SURNAME").getAsString();
+                    String dateOfBirth  = resultObject.get("DATEOFBIRTH").getAsString();
+                    String sex          = resultObject.get("SEX").getAsString();
+                    String nationality  = resultObject.get("NATIONALITY").getAsString();
+
+                    return quizDAO.saveUserNiNDetails(nin,firstName,lastName,dateOfBirth,sex,nationality);
+
+                }else{
+                    JSONObject jsonObject1 = new JSONObject();
+                    jsonObject1.put("message","Supplied NiN is not found, Review your details and try again!");
+                    return jsonObject1.toString();
+                }
+
+            }catch (IOException e) {
+                return e.getMessage();
+            }
+        }else{
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("message","Please supply your nida number to verify your details!");
+            return jsonObject1.toString();
+        }
+    }
+
 
     @Override
     public String addItemObject(String ItemPayload) {
@@ -85,7 +192,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             statusObject.put("message", "Incorrect Object Provided");
             return statusObject.toString();
         }
-
     }
 
     @Override
