@@ -533,5 +533,21 @@ public class HibernateQuizDAO implements QuizDAO {
         return res;
     }
 
+    @Override
+    public String inventorAnswer(int attribute_name_id, String attribute_value, String uuid) {
+        String res;
+        String answer = "update moh_device_inventory_attribute_answer set attribute_name_id = "+attribute_name_id+",attribute_value = '"+ attribute_value +"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(answer).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
 
 }

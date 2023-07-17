@@ -191,11 +191,13 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
                     statusObject.put("status", "success");
                     statusObject.put("message", "attribute set successfully");
                     statusObject.put("statusCode", 200);
-                } else if (status.equalsIgnoreCase("exist")) {
+                }
+                else if (status.equalsIgnoreCase("exist")) {
                     statusObject.put("status", "failed");
                     statusObject.put("message", "Record Exist");
                     statusObject.put("statusCode", 401);
-                } else {
+                }
+                else{
                     statusObject.put("status", "failed");
                     statusObject.put("message", "failed to set attribute");
                     statusObject.put("statusCode", 500);
@@ -220,7 +222,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             return statusObject.toString();
         }
     }
-
     @Override
     public String updateDeviceStatus(String status) {
         JSONObject deviceStatus = new JSONObject(status);
@@ -285,7 +286,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         int code=500;
        if(message.equals("correct")){
             MohDeviceDetails deviceDetails = quizDAO.setDeviceId(inventory.getString("deviceUuid"));
-
             MohDeviceStatus deviceStatus = quizDAO.setDeviceStatusId(inventory.getString("deviceStatusUuid"));
             Integer device_id = deviceDetails.getDeviceId();
             Integer device_status_id = deviceStatus.getStatus_id();
@@ -297,7 +297,8 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
                 MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(uuid_value);
                 Integer inventory_id = inventoryDetails.getInventory_id();
                 JSONArray attributesAnswerArray = inventory.getJSONArray("attribute_answer");
-                for (Object a : attributesAnswerArray) {
+                for (Object a : attributesAnswerArray)
+                {
                     JSONObject answersArray = (JSONObject) a;
                     AttributeNames attributeNames = quizDAO.setAttributeNames(answersArray.getString("attributeUuid"));
                     Integer attribute_name_id = attributeNames.getAttributeId();
@@ -358,25 +359,34 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
 
     @Override
     public String updateInventory(String inventoryPayload) {
-        JSONObject inventoryDetail = new JSONObject(inventoryPayload);
-        JSONObject statusObject = new JSONObject();
-        if(inventoryDetail.has("device_id") && inventoryDetail.has("device_status_id"))
-        {
-            String res= quizDAO.updateInventory(inventoryDetail.getInt("device_id"), inventoryDetail.getInt("device_status_id"),inventoryDetail.getString("uuid"));
-
-            if (res.equalsIgnoreCase("success")) {
-                statusObject.put("status", "success");
-                statusObject.put("statusCode", 200);
-                statusObject.put("message", "Device status updated successfully");
-                return statusObject.toString();
-            } else {
-                statusObject.put("status", "failed");
-                statusObject.put("statusCode", 500);
-                statusObject.put("message", "Failed to update device status");
-                return statusObject.toString();
+        JSONObject payloadObject = new JSONObject(inventoryPayload);
+        String status = "";
+        if (payloadObject.has("device_id")){
+            //update parent element
+            if(quizDAO.updateInventory(payloadObject.getInt("device_id"),payloadObject.getInt("device_status_id"),payloadObject.getString("uuid")).equalsIgnoreCase("success")){
+                //loop through the child element
+                JSONArray attributeArray = payloadObject.getJSONArray("attribute");
+                if (attributeArray.length() > 0){
+                    for (Object a : attributeArray){
+                        JSONObject attributeObject = (JSONObject)a;
+                        status = quizDAO.inventorAnswer(attributeObject.getInt("attribut_name_id"),attributeObject.getString("attribute_value"),attributeObject.getString("uuid"));
+                    }
+                    if (status.equalsIgnoreCase("success")){
+                        JSONObject statusObject = new JSONObject();
+                        statusObject.put("status", "success");
+                        statusObject.put("statusCode", 200);
+                        statusObject.put("message","update successful");
+                        return statusObject.toString();
+                    }
+                }
             }
+            JSONObject statusObject = new JSONObject();
+            statusObject.put("status", "success");
+            statusObject.put("statusCode", 200);
+            statusObject.put("message","update successful");
+            return statusObject.toString();
         }
-        return null;
+       return null;
     }
 
 

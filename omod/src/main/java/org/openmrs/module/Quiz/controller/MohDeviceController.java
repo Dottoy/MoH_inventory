@@ -103,7 +103,7 @@ public class MohDeviceController extends BaseRestController {
         return quizService.listInventoryAttributeAnswers(inventory_uuid);
     }
 
-    @RequestMapping(value = "/update_inventory", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update_inventory", method = RequestMethod.POST)
     @ResponseBody
     public String updateInventory(@RequestBody String inventoryPayload) {
         QuizService inventoryService = Context.getService(QuizService.class);
