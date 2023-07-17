@@ -155,7 +155,8 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public List deviceList() {
-        String hql ="SELECT moh_device_type.device_type_name AS deviceTypeName, " +
+        String hql ="SELECT moh_device_type.device_type_id AS deviceTypeId, moh_device.device_id AS deviceId, " +
+                "moh_device_type.device_type_name AS deviceTypeName, " +
                 "device_name AS deviceName, " +
                 "moh_device.created_by AS createdBy, " +
                 "moh_device.created_at AS createdAt, " +
