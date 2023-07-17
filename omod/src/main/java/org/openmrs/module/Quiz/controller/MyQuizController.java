@@ -11,7 +11,7 @@ import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +24,12 @@ public class MyQuizController extends BaseRestController {
 
     //moh inventory functions start here
 
+    @RequestMapping(value ="/verify/nida/number", method = RequestMethod.POST)
+    @ResponseBody
+    public String verifyNiN(@RequestBody String nidaNumber){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.verifyUserNidNumber(nidaNumber);
+    }
 
     @RequestMapping(value ="/new/device/type", method = RequestMethod.POST)
     @ResponseBody
@@ -32,6 +38,14 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceTypeObject(deviceTypeBody);
     }
 
+    @RequestMapping(value ="/add/device/movement", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceMovementObject(@RequestBody String deviceMovementBody){
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.addDeviceMovementObject(deviceMovementBody);
+    }
+
+//    @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
     @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){

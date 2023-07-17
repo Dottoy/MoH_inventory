@@ -25,9 +25,11 @@ public interface QuizDAO {
      //moh functions start here
      String addDeviceType(String type_name);
 
+     String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid);
+
      String updateDeviceTypeObject(String typeName, String type_id);
 
-
+    String saveUserNiNDetails(String nin,String firstName,String lastName,String dateOfBirth,String sex, String nationality);
      //moh functions end here
 
      String addItem(String ItemName, String Description);
@@ -77,4 +79,8 @@ public interface QuizDAO {
     List getInventoryList();
 
     List getListInventoryAttributeAnswers(Integer inventory_id);
+
+    String updateInventory(int device_id, int device_status_id, String uuid);
+
+    String inventorAnswer(int attribute_name_id, String attribute_value, String uuid);
 }

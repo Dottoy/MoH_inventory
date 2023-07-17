@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.Quiz.api.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openmrs.Location;
@@ -22,10 +24,16 @@ import org.openmrs.module.Quiz.model.MohDeviceInventory;
 import org.openmrs.module.Quiz.model.MohDeviceStatus;
 import org.openmrs.module.Quiz.util.DateUtil;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.DataOutputStream;
 
 import java.util.List;
 import java.util.UUID;
-
+import com.google.gson.Gson;
 /**
  * Implementation of {@link QuizService}.
  */
@@ -50,6 +58,23 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         return quizDAO.addDeviceType(itemObject.getString("type_name"));
     }
 
+    public String addDeviceMovementObject(String deviceMovementBody){
+        JSONObject deviceObject = new JSONObject(deviceMovementBody);
+        if (deviceObject.has("dev_uuid") && deviceObject.has("receiver_uuid") && deviceObject.has("sender_uuid") && deviceObject.has("location_uuid")){
+            if (deviceObject.getString("dev_uuid").equalsIgnoreCase("") || deviceObject.getString("receiver_uuid").equalsIgnoreCase("") || deviceObject.getString("sender_uuid").equalsIgnoreCase("") || deviceObject.getString("location_uuid").equalsIgnoreCase("")){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("message","Review you data, some details are missing to process this request!");
+                return jsonObject.toString();
+            }else{
+                return quizDAO.addDeviceMovementObject(deviceObject.getString("dev_uuid"),deviceObject.getString("receiver_uuid"),deviceObject.getString("sender_uuid"),deviceObject.getString("location_uuid"));
+            }
+        }else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message","All fields are required");
+            return jsonObject.toString();
+        }
+    }
+
     @Override
     public String updateDeviceTypeObject(String deviceTypeBody) {
         JSONObject itemObject = new JSONObject(deviceTypeBody);
@@ -72,6 +97,88 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         }
     }
 
+    @Override
+    public String verifyUserNidNumber(String nidaNumber) {
+        JSONObject nidaObject = new JSONObject(nidaNumber);
+        if (!nidaObject.getString("nida_number").equalsIgnoreCase("")){
+            String myNida = nidaObject.getString("nida_number");
+            try{
+                // Create URL object with the target URL
+                URL url = new URL("https://ors.brela.go.tz/um/load/load_nida/"+myNida);
+
+                // Create HttpURLConnection object
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                // Set request method (GET, POST, PUT, DELETE, etc.)
+                connection.setRequestMethod("POST");
+
+                // Optional: Set request headers
+                connection.setRequestProperty("Content-Type", "application/json");
+//                connection.setRequestProperty("Authorization", "Bearer <your_token>");
+
+                // Request body
+                String requestBody = "{\"key\":\"value\"}";
+
+                // Set the Content-Length header
+                connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length()));
+
+                // Enable output and write the request body
+                connection.setDoOutput(true);
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(requestBody);
+                outputStream.flush();
+                outputStream.close();
+
+                // Get response code
+                int responseCode = connection.getResponseCode();
+//                System.out.println("Response Code: " + responseCode);
+
+                // Read the response
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                // Close the connection
+                connection.disconnect();
+                String requestResponse = response.toString();
+
+                // Parse the JSON string into a JsonObject
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(requestResponse, JsonObject.class);
+
+
+                // Access the nested data
+                JsonObject resultObject = jsonObject.getAsJsonObject("obj").getAsJsonObject("result");
+                if (jsonObject.has("obj") && jsonObject.get("obj").getAsJsonObject().has("result")){
+                    String nin          = resultObject.get("NIN").getAsString();
+                    String firstName    = resultObject.get("FIRSTNAME").getAsString();
+                    String lastName     = resultObject.get("SURNAME").getAsString();
+                    String dateOfBirth  = resultObject.get("DATEOFBIRTH").getAsString();
+                    String sex          = resultObject.get("SEX").getAsString();
+                    String nationality  = resultObject.get("NATIONALITY").getAsString();
+
+                    return quizDAO.saveUserNiNDetails(nin,firstName,lastName,dateOfBirth,sex,nationality);
+
+                }else{
+                    JSONObject jsonObject1 = new JSONObject();
+                    jsonObject1.put("message","Supplied NiN is not found, Review your details and try again!");
+                    return jsonObject1.toString();
+                }
+
+            }catch (IOException e) {
+                return e.getMessage();
+            }
+        }else{
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("message","Please supply your nida number to verify your details!");
+            return jsonObject1.toString();
+        }
+    }
+
 
     @Override
     public String addItemObject(String ItemPayload) {
@@ -85,7 +192,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             statusObject.put("message", "Incorrect Object Provided");
             return statusObject.toString();
         }
-
     }
 
     @Override
@@ -191,11 +297,13 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
                     statusObject.put("status", "success");
                     statusObject.put("message", "attribute set successfully");
                     statusObject.put("statusCode", 200);
-                } else if (status.equalsIgnoreCase("exist")) {
+                }
+                else if (status.equalsIgnoreCase("exist")) {
                     statusObject.put("status", "failed");
                     statusObject.put("message", "Record Exist");
                     statusObject.put("statusCode", 401);
-                } else {
+                }
+                else{
                     statusObject.put("status", "failed");
                     statusObject.put("message", "failed to set attribute");
                     statusObject.put("statusCode", 500);
@@ -220,7 +328,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
             return statusObject.toString();
         }
     }
-
     @Override
     public String updateDeviceStatus(String status) {
         JSONObject deviceStatus = new JSONObject(status);
@@ -285,7 +392,6 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         int code=500;
        if(message.equals("correct")){
             MohDeviceDetails deviceDetails = quizDAO.setDeviceId(inventory.getString("deviceUuid"));
-
             MohDeviceStatus deviceStatus = quizDAO.setDeviceStatusId(inventory.getString("deviceStatusUuid"));
             Integer device_id = deviceDetails.getDeviceId();
             Integer device_status_id = deviceStatus.getStatus_id();
@@ -297,7 +403,8 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
                 MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(uuid_value);
                 Integer inventory_id = inventoryDetails.getInventory_id();
                 JSONArray attributesAnswerArray = inventory.getJSONArray("attribute_answer");
-                for (Object a : attributesAnswerArray) {
+                for (Object a : attributesAnswerArray)
+                {
                     JSONObject answersArray = (JSONObject) a;
                     AttributeNames attributeNames = quizDAO.setAttributeNames(answersArray.getString("attributeUuid"));
                     Integer attribute_name_id = attributeNames.getAttributeId();
@@ -355,5 +462,38 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
         Integer inventory_id = inventoryDetails.getInventory_id();
         return quizDAO.getListInventoryAttributeAnswers(inventory_id);
     }
+
+    @Override
+    public String updateInventory(String inventoryPayload) {
+        JSONObject payloadObject = new JSONObject(inventoryPayload);
+        String status = "";
+        if (payloadObject.has("device_id")){
+            //update parent element
+            if(quizDAO.updateInventory(payloadObject.getInt("device_id"),payloadObject.getInt("device_status_id"),payloadObject.getString("uuid")).equalsIgnoreCase("success")){
+                //loop through the child element
+                JSONArray attributeArray = payloadObject.getJSONArray("attribute");
+                if (attributeArray.length() > 0){
+                    for (Object a : attributeArray){
+                        JSONObject attributeObject = (JSONObject)a;
+                        status = quizDAO.inventorAnswer(attributeObject.getInt("attribut_name_id"),attributeObject.getString("attribute_value"),attributeObject.getString("uuid"));
+                    }
+                    if (status.equalsIgnoreCase("success")){
+                        JSONObject statusObject = new JSONObject();
+                        statusObject.put("status", "success");
+                        statusObject.put("statusCode", 200);
+                        statusObject.put("message","update successful");
+                        return statusObject.toString();
+                    }
+                }
+            }
+            JSONObject statusObject = new JSONObject();
+            statusObject.put("status", "success");
+            statusObject.put("statusCode", 200);
+            statusObject.put("message","update successful");
+            return statusObject.toString();
+        }
+       return null;
+    }
+
 
 }

@@ -33,6 +33,13 @@ public class MohDeviceController extends BaseRestController {
         return deviceService.updateDevice(detailPayload);
     }
 
+    @RequestMapping(value = "/assignment-nida/${id}", method = RequestMethod.POST)
+    @ResponseBody
+    public String assignmentNida(@PathVariable("id") String id) {
+        System.out.println(id);
+        return "";
+    }
+
     @RequestMapping(value = "/device_list", method = RequestMethod.GET)
     @ResponseBody
     public String deviceList() {
@@ -94,5 +101,12 @@ public class MohDeviceController extends BaseRestController {
     {
         QuizService quizService = Context.getService(QuizService.class);
         return quizService.listInventoryAttributeAnswers(inventory_uuid);
+    }
+
+    @RequestMapping(value = "/update_inventory", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateInventory(@RequestBody String inventoryPayload) {
+        QuizService inventoryService = Context.getService(QuizService.class);
+        return inventoryService.updateInventory(inventoryPayload);
     }
 }

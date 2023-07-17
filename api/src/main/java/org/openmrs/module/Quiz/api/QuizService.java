@@ -22,10 +22,13 @@ import java.util.List;
 public interface QuizService extends OpenmrsService {
 
     //function for moh test goes here
+    String addDeviceMovementObject(String deviceMovementBody);
+
     String addDeviceTypeObject(String deviceTypeBody);
 
     String updateDeviceTypeObject(String deviceTypeBody);
 
+    String verifyUserNidNumber(String nidaNumber);
 
     //function for moh test end here
 
@@ -64,4 +67,6 @@ public interface QuizService extends OpenmrsService {
     List listInventory();
 
     List listInventoryAttributeAnswers(String inventoryUuid);
+
+    String updateInventory(String inventoryPayload);
 }
