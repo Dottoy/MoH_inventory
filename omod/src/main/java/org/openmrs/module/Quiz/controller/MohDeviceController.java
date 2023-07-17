@@ -26,7 +26,7 @@ public class MohDeviceController extends BaseRestController {
         return deviceService.addDevice(detailPayload);
     }
 
-    @RequestMapping(value = "/update_device", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update_device", method = RequestMethod.POST)
     @ResponseBody
     public String updateDevice(@RequestBody String detailPayload) {
         QuizService deviceService = Context.getService(QuizService.class);

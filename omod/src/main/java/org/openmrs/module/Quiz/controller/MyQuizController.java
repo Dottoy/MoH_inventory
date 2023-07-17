@@ -32,7 +32,7 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceTypeObject(deviceTypeBody);
     }
 
-    @RequestMapping(value ="/update/device/type", method = RequestMethod.PUT)
+    @RequestMapping(value ="/update/device/type", method = RequestMethod.POST)
     @ResponseBody
     public String updateDeviceTypeObject(@RequestBody String deviceTypeBody){
         QuizService quizService = Context.getService(QuizService.class);
@@ -64,7 +64,7 @@ public class MyQuizController extends BaseRestController {
 
     //for update attribute names
 
-    @RequestMapping(value="/update_attribute_name",  method = RequestMethod.PUT)
+    @RequestMapping(value="/update_attribute_name",  method = RequestMethod.POST)
     @ResponseBody
     public String updateAttributeName(@RequestBody String name)
     {
@@ -100,7 +100,7 @@ public class MyQuizController extends BaseRestController {
         return quizService.addDeviceStatus(status);
     }
     //update device status
-    @RequestMapping(value="/update_device_status",  method = RequestMethod.PUT)
+    @RequestMapping(value="/update_device_status",  method = RequestMethod.POST)
     @ResponseBody
     public String updateDeviceStatus(@RequestBody String status)
     {
