@@ -83,4 +83,12 @@ public interface QuizDAO {
     String updateInventory(int device_id, int device_status_id, String uuid);
 
     String inventorAnswer(int attribute_name_id, String attribute_value, String uuid);
+
+    String addMaintenance(String reported_issue, Integer inventory_id);
+
+    String updateDeviceMaintenance(String reported_issue, Integer inventory_id, String uuid);
+
+    String attendDeviceMaintenance(String fault_found, String action_taken, String uuid);
+
+    List listDeviceMaintenance(String uuid, String type);
 }

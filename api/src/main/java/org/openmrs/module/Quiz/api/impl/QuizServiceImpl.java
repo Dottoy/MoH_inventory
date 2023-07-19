@@ -495,5 +495,84 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
        return null;
     }
 
+    @Override
+    public String addDeviceMaintenance(String maintenancePayLoad) {
+        JSONObject maintenance = new JSONObject(maintenancePayLoad);
+        JSONObject status = new JSONObject();
+        if(maintenance.has("inventoryUuid"))
+        {
+            MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(maintenance.getString("inventoryUuid"));
+            Integer inventory_id = inventoryDetails.getInventory_id();
+            String response = quizDAO.addMaintenance(maintenance.getString("reported_issue"),inventory_id);
+            if(response.equalsIgnoreCase("success"))
+            {
+                status.put("status","success");
+                status.put("statusCode",200);
+                status.put("message","data saved");
+                return status.toString();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String updateDeviceMaintenance(String maintenancePayLoad) {
+        JSONObject maintenance = new JSONObject(maintenancePayLoad);
+        String status="";
+        if(maintenance.has("uuid") && maintenance.has("inventoryUuid"))
+        {
+            MohDeviceInventory inventoryDetails = quizDAO.setInventoryDetail(maintenance.getString("inventoryUuid"));
+            Integer inventory_id = inventoryDetails.getInventory_id();
+            status= quizDAO.updateDeviceMaintenance(maintenance.getString("reported_issue"),inventory_id,maintenance.getString("uuid"));
+            if (status.equalsIgnoreCase("success")){
+                JSONObject statusObject = new JSONObject();
+                statusObject.put("status", "success");
+                statusObject.put("statusCode", 200);
+                statusObject.put("message","update successful");
+                return statusObject.toString();
+            }
+            else
+            {
+                JSONObject statusObject = new JSONObject();
+                statusObject.put("status", "Fail");
+                statusObject.put("statusCode", 400);
+                statusObject.put("message","fail to update successful");
+                return statusObject.toString();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String attendDeviceMaintenance(String maintenancePayLoad) {
+        JSONObject maintenance = new JSONObject(maintenancePayLoad);
+        String status="";
+        if(maintenance.has("uuid"))
+        {
+            status= quizDAO.attendDeviceMaintenance(maintenance.getString("fault_found"), maintenance.getString("action_taken"),maintenance.getString("uuid"));
+            if (status.equalsIgnoreCase("success")){
+                JSONObject statusObject = new JSONObject();
+                statusObject.put("status", "success");
+                statusObject.put("statusCode", 200);
+                statusObject.put("message","update successful");
+                return statusObject.toString();
+            }
+            else
+            {
+                JSONObject statusObject = new JSONObject();
+                statusObject.put("status", "Fail");
+                statusObject.put("statusCode", 400);
+                statusObject.put("message","fail to update successful");
+                return statusObject.toString();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List listDeviceMaintenance(String uuid, String type) {
+        return quizDAO.listDeviceMaintenance(uuid, type);
+    }
+
 
 }

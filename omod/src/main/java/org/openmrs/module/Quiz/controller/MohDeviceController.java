@@ -109,4 +109,33 @@ public class MohDeviceController extends BaseRestController {
         QuizService inventoryService = Context.getService(QuizService.class);
         return inventoryService.updateInventory(inventoryPayload);
     }
+    @RequestMapping(value="/add_device_maintenance", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDeviceMaintenance(@RequestBody String maintenancePayLoad)
+    {
+        QuizService quizService= Context.getService(QuizService.class);
+        return quizService.addDeviceMaintenance(maintenancePayLoad);
+    }
+
+    @RequestMapping(value = "/update_device_maintenance", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateDeviceMaintenance(@RequestBody String maintenancePayLoad) {
+        QuizService deviceMaintenance = Context.getService(QuizService.class);
+        return deviceMaintenance.updateDeviceMaintenance(maintenancePayLoad);
+    }
+    @RequestMapping(value = "/attend_device_maintenance", method = RequestMethod.POST)
+    @ResponseBody
+    public String attendDeviceMaintenance(@RequestBody String maintenancePayLoad) {
+        QuizService deviceMaintenance = Context.getService(QuizService.class);
+        return deviceMaintenance.attendDeviceMaintenance(maintenancePayLoad);
+    }
+
+    @RequestMapping(value = "/list_device_maintenance", method = RequestMethod.GET)
+    @ResponseBody
+    public List listDeviceMaintenance(@RequestParam("uuid") String uuid,
+                           @RequestParam("type") String type)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.listDeviceMaintenance(uuid,type);
+    }
 }

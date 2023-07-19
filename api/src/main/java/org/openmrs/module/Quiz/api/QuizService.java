@@ -69,4 +69,12 @@ public interface QuizService extends OpenmrsService {
     List listInventoryAttributeAnswers(String inventoryUuid);
 
     String updateInventory(String inventoryPayload);
+
+    String addDeviceMaintenance(String maintenancePayLoad);
+
+    String updateDeviceMaintenance(String maintenancePayLoad);
+
+    String attendDeviceMaintenance(String maintenancePayLoad);
+
+    List listDeviceMaintenance(String uuid, String type);
 }

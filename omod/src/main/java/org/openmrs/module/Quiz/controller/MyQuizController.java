@@ -170,8 +170,8 @@ public class MyQuizController extends BaseRestController {
     public String getAllLocation()
     {
         LocationService location=Context.getLocationService();
-       String response = new  Gson().toJson(location.getAllLocations());
-       return response;
+        String response = new  Gson().toJson(location.getAllLocations());
+        return response;
     }
 
 }

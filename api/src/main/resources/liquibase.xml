@@ -225,7 +225,6 @@
     </changeSet>
 
 
-
     <changeSet id="moh_device_maintenance" author="Mulisa" dbms="mysql">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -362,7 +361,8 @@
 
         <addForeignKeyConstraint constraintName="fk_moh_device_attribute_attribute_id"
                                  baseTableName="moh_device_attribute" baseColumnNames="attribute_id"
-                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
+                                 referencedTableName="moh_additional_attributes_names"
+                                 referencedColumnNames="attribute_id"
                                  onDelete="RESTRICT" onUpdate="CASCADE"/>
 
 
@@ -373,7 +373,8 @@
 
         <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attributes_name_id"
                                  baseTableName="moh_device_inventory" baseColumnNames="attribute_name_id"
-                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
+                                 referencedTableName="moh_additional_attributes_names"
+                                 referencedColumnNames="attribute_id"
                                  onDelete="RESTRICT" onUpdate="CASCADE"/>
 
 
@@ -406,7 +407,8 @@
         <addForeignKeyConstraint constraintName="fk_moh_device_inventory_attribute_answer_attribute_name_id"
                                  baseTableName="moh_device_inventory_attribute_answer"
                                  baseColumnNames="attribute_name_id"
-                                 referencedTableName="moh_additional_attributes_names" referencedColumnNames="attribute_id"
+                                 referencedTableName="moh_additional_attributes_names"
+                                 referencedColumnNames="attribute_id"
                                  onDelete="RESTRICT" onUpdate="CASCADE"/>
 
         <addForeignKeyConstraint constraintName="fk_moh_device_maintenance_inventory_id"
@@ -518,6 +520,32 @@
         />
     </changeSet>
 
+    <changeSet author="bosco-mafuru" id="addDefaultValue-moh_device_maintenance">
+        <sql>
+            ALTER TABLE `moh_device_maintenance` CHANGE `service_by` `service_by` INT(11) NULL;
+        </sql>
+        <sql>
+            ALTER TABLE `moh_device_maintenance` CHANGE `service_date` `service_date` date NULL;
+        </sql>
+<!--        <addDefaultValue-->
+<!--                columnDataType="int(11)"-->
+<!--                columnName="service_by"-->
+<!--                defaultValue="NULL"-->
+<!--                tableName="moh_device_maintenance"/>-->
+<!--        <addDefaultValue-->
+<!--                columnDataType="date"-->
+<!--                columnName="service_date"-->
+<!--                defaultValue="NULL"-->
+<!--                tableName="moh_device_maintenance"/>-->
 
+        <addColumn tableName="moh_device_maintenance">
+            <column name="action_taken" type="varchar(255)" defaultValue="null"/>
+        </addColumn>
+
+        <addColumn tableName="moh_device_maintenance">
+            <column name="fault_found" type="varchar(255)" defaultValue="null"/>
+        </addColumn>
+
+    </changeSet>
 
 </databaseChangeLog>

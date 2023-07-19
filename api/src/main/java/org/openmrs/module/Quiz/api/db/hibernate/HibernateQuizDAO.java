@@ -591,5 +591,95 @@ public class HibernateQuizDAO implements QuizDAO {
         return res;
     }
 
+    @Override
+    public String addMaintenance(String reported_issue, Integer inventory_id) {
+        JSONObject res = new JSONObject();
+        String query_string = "insert into moh_device_maintenance (inventory_id,reported_issue,reported_by, date_reported,created_at,uuid) " +
+                " values (" + inventory_id + ",'"+ reported_issue +"', " + Context.getAuthenticatedUser().getUserId() + ", current_date(),current_date(), uuid())";
+        int rowsAffected = createSQLQuery(query_string).executeUpdate();
+        if (rowsAffected > 0) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @Override
+    public String updateDeviceMaintenance(String reported_issue, Integer inventory_id, String uuid) {
+        String res;
+        String ans = "update moh_device_maintenance set inventory_id = "+inventory_id+",reported_issue = '"+ reported_issue +"' where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public String attendDeviceMaintenance(String fault_found, String action_taken, String uuid) {
+        String res;
+        String ans = "update moh_device_maintenance set fault_found = '"+ fault_found +"',action_taken ='"+ action_taken +"', service_by=" + Context.getAuthenticatedUser().getUserId() + ", service_date= current_date() where uuid = '"+uuid+"'";
+        int rowsAffected = createSQLQuery(ans).executeUpdate();
+        if (rowsAffected >= 1)
+        {
+            res= "success";
+        }
+        else
+        {
+            res="failed";
+        }
+        return res;
+    }
+
+    @Override
+    public List listDeviceMaintenance(String uuid, String type) {
+        String hql;
+        if (type.equalsIgnoreCase("all")){
+            hql ="select moh_device_maintenance.reported_issue AS reported_issue, "+
+                    " moh_device_maintenance.fault_found AS fault_found, "+
+                    " moh_device_maintenance.action_taken AS action_taken," +
+                    " moh_additional_attributes_names.name AS attribute_name,"+
+                    " moh_device_maintenance.uuid AS uuid, " +
+                    " moh_device_maintenance.reported_by AS reported_by, " +
+                    " CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS creator " +
+                    " FROM moh_device_maintenance, users, person_name, moh_device_inventory, moh_device_inventory_attribute_answer, moh_additional_attributes_names  WHERE " +
+                    " moh_device_inventory.inventory_id=moh_device_maintenance.inventory_id " +
+                    " AND moh_device_maintenance.reported_by=users.user_id " +
+                    " AND moh_device_inventory_attribute_answer.inventory_id=moh_device_inventory.inventory_id " +
+                    " AND moh_device_inventory_attribute_answer.attribute_name_id=moh_additional_attributes_names.attribute_id " +
+                    " AND users.person_id=person_name.person_id";
+        }
+        else {
+            hql="select moh_device_maintenance.reported_issue AS reported_issue,"+
+                    " moh_device_maintenance.fault_found AS fault_found, "+
+                    " moh_device_maintenance.action_taken AS action_taken," +
+                    " moh_additional_attributes_names.name AS attribute_name,"+
+                    " moh_device_maintenance.uuid AS uuid, " +
+                    " moh_device_maintenance.reported_by AS reported_by, " +
+                    " CONCAT(IFNULL(person_name.given_name, ' '), ' ', IFNULL(person_name.middle_name, ' '), ' ', IFNULL(person_name.family_name, ' ')) AS creator " +
+                    " FROM moh_device_maintenance, users, person_name, moh_device_inventory, moh_device_inventory_attribute_answer, moh_additional_attributes_names  WHERE " +
+                    " moh_device_inventory.inventory_id=moh_device_maintenance.inventory_id " +
+                    " AND moh_device_maintenance.reported_by=users.user_id "+
+                    " AND moh_device_inventory_attribute_answer.inventory_id=moh_device_inventory.inventory_id " +
+                    " AND moh_device_inventory_attribute_answer.attribute_name_id=moh_additional_attributes_names.attribute_id " +
+                    " AND users.person_id=person_name.person_id  AND moh_device_maintenance.uuid = '"+uuid+"' LIMIT 1";
+        }
+        DbSession session=sessionFactory.getCurrentSession();
+        Query query=session.createSQLQuery(hql).setResultTransformer(Transformers.aliasToBean(deviceMaintenance.class));
+        List infor=query.list();
+        if(infor!=null)
+        {
+            if(infor.size()>0)
+            {
+                return infor;
+            }
+        }
+        return null;
+    }
+
 
 }
