@@ -21,6 +21,7 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
 import org.openmrs.module.Quiz.model.*;
 
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
 
@@ -688,11 +689,26 @@ public class HibernateQuizDAO implements QuizDAO {
     }
 
     @Override
-    public String getCounter(String period, String generatedSql) {
+    public BigInteger getCounter(String period, String generatedSql) {
         DbSession session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery(generatedSql);
         query.setParameter("tarehe", period);
         query.setParameter("tarehemwezi", period.substring(0,7));
-        return query.list().toString()+" "+period.substring(0,7);
+        return (BigInteger) query.uniqueResult();
+    }
+
+    @Override
+    public DhisMohReports setDhisReports(Integer reportId) {
+        String hql_device = "SELECT * FROM dhis_moh_reports where report_id=" + reportId;
+        DbSession session = sessionFactory.getCurrentSession();
+        Query query = session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(DhisMohReports.class));
+        List results = query.list();
+        if (results != null) {
+            if (results.size() > 0) {
+                Iterator iterator = results.iterator();
+                return (DhisMohReports) iterator.next();
+            }
+        }
+        return null;
     }
 }
