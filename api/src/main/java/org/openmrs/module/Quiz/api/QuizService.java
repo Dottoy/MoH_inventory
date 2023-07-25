@@ -10,6 +10,7 @@
 package org.openmrs.module.Quiz.api;
 
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.Quiz.model.DhisMohCounter;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -77,4 +78,6 @@ public interface QuizService extends OpenmrsService {
     String attendDeviceMaintenance(String maintenancePayLoad);
 
     List listDeviceMaintenance(String uuid, String type);
+
+    DhisMohCounter getMonthlyOpd(String detailPayload);
 }

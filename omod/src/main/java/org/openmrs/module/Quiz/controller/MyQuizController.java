@@ -7,6 +7,7 @@ import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Quiz.api.QuizService;
+import org.openmrs.module.Quiz.model.DhisMohCounter;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController;
 import org.springframework.stereotype.Controller;
@@ -172,6 +173,14 @@ public class MyQuizController extends BaseRestController {
         LocationService location=Context.getLocationService();
         String response = new  Gson().toJson(location.getAllLocations());
         return response;
+    }
+
+    @RequestMapping(value = "/monthly_opd", method = RequestMethod.GET)
+    @ResponseBody
+    public DhisMohCounter getMonthlyOpd(@RequestBody String detailPayload)
+    {
+        QuizService quizService = Context.getService(QuizService.class);
+        return quizService.getMonthlyOpd(detailPayload);
     }
 
 }

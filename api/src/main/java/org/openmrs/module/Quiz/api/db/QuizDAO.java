@@ -9,10 +9,7 @@
  */
 package org.openmrs.module.Quiz.api.db;
 import org.openmrs.module.Quiz.api.QuizService;
-import org.openmrs.module.Quiz.model.AttributeNames;
-import org.openmrs.module.Quiz.model.MohDeviceDetails;
-import org.openmrs.module.Quiz.model.MohDeviceInventory;
-import org.openmrs.module.Quiz.model.MohDeviceStatus;
+import org.openmrs.module.Quiz.model.*;
 
 import java.util.List;
 
@@ -22,7 +19,10 @@ import java.util.List;
  */
 public interface QuizDAO {
 
-     //moh functions start here
+
+
+
+    //moh functions start here
      String addDeviceType(String type_name);
 
      String addDeviceMovementObject(String dev_uuid,String receiver_uuid,String sender_uuid,String location_uuid);
@@ -91,4 +91,11 @@ public interface QuizDAO {
     String attendDeviceMaintenance(String fault_found, String action_taken, String uuid);
 
     List listDeviceMaintenance(String uuid, String type);
+
+    List getMonthlyOpd(Integer report_id) ;
+
+    DhisMohElement setMohElement(Integer element_id);
+    DhisMohReportHeader setReportHeader(Integer report_id);
+
+    DhisMohCounter getCounter(String period, String generatedSql);
 }
