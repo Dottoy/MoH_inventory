@@ -21,7 +21,6 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.Quiz.api.db.QuizDAO;
 import org.openmrs.module.Quiz.model.*;
 
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -554,9 +553,8 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public List getMonthlyOpd(Integer report_id) {
-        String response;
         String hql = "SELECT dhis_moh_report_element_combo.element_id AS elementId, " +
-                "dhis_moh_report_element_combo.report_header_id AS headerId " +
+                "dhis_moh_report_element_combo.report_header_id AS headerId, categoryOptionComboUUID AS categoryOptionCombo " +
                 "FROM dhis_moh_report_element_combo, dhis_moh_report_header WHERE " +
                 "dhis_moh_report_element_combo.report_header_id=dhis_moh_report_header.id AND report_id='" + report_id + "'";
         DbSession session = sessionFactory.getCurrentSession();
@@ -572,7 +570,7 @@ public class HibernateQuizDAO implements QuizDAO {
 
     @Override
     public DhisMohElement setMohElement(Integer element_id) {
-        String hql_device = "SELECT sql_query FROM dhis_moh_element where element_id=" + element_id;
+        String hql_device = "SELECT * FROM dhis_moh_element where element_id=" + element_id;
         DbSession session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(DhisMohElement.class));
         List results = query.list();
@@ -676,7 +674,7 @@ public class HibernateQuizDAO implements QuizDAO {
 
 
     public DhisMohReportHeader setReportHeader(Integer header_id) {
-        String hql_device = "SELECT filter_query FROM dhis_moh_report_header where id=" + header_id;
+        String hql_device = "SELECT * FROM dhis_moh_report_header where id=" + header_id;
         DbSession session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery(hql_device).setResultTransformer(Transformers.aliasToBean(DhisMohReportHeader.class));
         List results = query.list();
@@ -690,16 +688,11 @@ public class HibernateQuizDAO implements QuizDAO {
     }
 
     @Override
-    public DhisMohCounter getCounter(String period, String generatedSql) {
+    public String getCounter(String period, String generatedSql) {
         DbSession session = sessionFactory.getCurrentSession();
-        Query query = session.createSQLQuery(generatedSql).setResultTransformer(Transformers.aliasToBean(DhisMohCounter.class));
-        List results = query.list();
-        if (results != null) {
-            if (results.size() > 0) {
-                Iterator iterator = results.iterator();
-                return (DhisMohCounter) iterator.next();
-            }
-        }
-        return null;
+        Query query = session.createSQLQuery(generatedSql);
+        query.setParameter("tarehe", period);
+        query.setParameter("tarehemwezi", period.substring(0,7));
+        return query.list().toString()+" "+period.substring(0,7);
     }
 }

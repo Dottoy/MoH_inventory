@@ -79,5 +79,5 @@ public interface QuizService extends OpenmrsService {
 
     List listDeviceMaintenance(String uuid, String type);
 
-    DhisMohCounter getMonthlyOpd(String detailPayload);
+    String getMonthlyOpd(String detailPayload);
 }

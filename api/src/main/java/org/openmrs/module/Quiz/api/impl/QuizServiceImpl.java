@@ -492,24 +492,34 @@ public class QuizServiceImpl extends BaseOpenmrsService implements QuizService {
     }
 
     @Override
-    public DhisMohCounter getMonthlyOpd(String detailPayload) {
+    public String getMonthlyOpd(String detailPayload) {
         JSONObject payloadObject = new JSONObject(detailPayload);
+
         if (payloadObject.has("period")) {
             String period = payloadObject.getString("period");
             List listCombo = quizDAO.getMonthlyOpd(1);
             JSONArray jsonArray = new JSONArray(listCombo);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                int elementId = jsonObject.getInt("elementId");
-                int headerId = jsonObject.getInt("headerId");
-                DhisMohElement mohElement = quizDAO.setMohElement(elementId);
+            JSONArray resultJsonArray = new JSONArray();
+
+            for (Object a : jsonArray) {
+                JSONObject attributeObject = (JSONObject) a;
+                Integer element_id = attributeObject.getInt("elementId");
+                String categoryOptionCombo = attributeObject.getString("categoryOptionCombo");
+                Integer headerId = attributeObject.getInt("headerId");
+                DhisMohElement mohElement = quizDAO.setMohElement(element_id);
+
                 String sql_query = mohElement.getSql_query();
                 DhisMohReportHeader reportHeader = quizDAO.setReportHeader(headerId);
                 String filtered_sql_query = reportHeader.getFilter_query();
-                String generatedSql = sql_query +' '+ filtered_sql_query;
-                return quizDAO.getCounter(period, generatedSql);
+                String generatedSql = sql_query + ' ' + filtered_sql_query;
+
+                JSONObject rs = new JSONObject(); // Move the creation inside the loop
+                rs.put("dataElement", mohElement.getData_element_uuid_dhis());
+                rs.put("categoryOptionCombo", categoryOptionCombo);
+                rs.put("value", quizDAO.getCounter(period, generatedSql));
+                resultJsonArray.put(rs); // Add the object to the array inside the loop
             }
-//            return quizDAO.getMonthlyOpd(1);
+            return resultJsonArray.toString();
         }
         return null;
     }

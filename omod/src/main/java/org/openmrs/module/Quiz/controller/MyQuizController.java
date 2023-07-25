@@ -177,7 +177,7 @@ public class MyQuizController extends BaseRestController {
 
     @RequestMapping(value = "/monthly_opd", method = RequestMethod.GET)
     @ResponseBody
-    public DhisMohCounter getMonthlyOpd(@RequestBody String detailPayload)
+    public String getMonthlyOpd(@RequestBody String detailPayload)
     {
         QuizService quizService = Context.getService(QuizService.class);
         return quizService.getMonthlyOpd(detailPayload);

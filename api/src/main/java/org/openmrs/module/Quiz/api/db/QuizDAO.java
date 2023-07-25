@@ -8,6 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 package org.openmrs.module.Quiz.api.db;
+import org.hibernate.Query;
 import org.openmrs.module.Quiz.api.QuizService;
 import org.openmrs.module.Quiz.model.*;
 
@@ -97,5 +98,5 @@ public interface QuizDAO {
     DhisMohElement setMohElement(Integer element_id);
     DhisMohReportHeader setReportHeader(Integer report_id);
 
-    DhisMohCounter getCounter(String period, String generatedSql);
+    String getCounter(String period, String generatedSql);
 }

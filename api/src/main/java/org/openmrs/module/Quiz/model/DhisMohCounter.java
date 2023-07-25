@@ -1,13 +1,13 @@
 package org.openmrs.module.Quiz.model;
 
 public class DhisMohCounter {
- private Integer   counter;
+    private int counter;
 
-    public Integer getCounter() {
+    public int getCounter() {
         return counter;
     }
 
-    public void setCounter(Integer counter) {
+    public void setCounter(int counter) {
         this.counter = counter;
     }
 }
